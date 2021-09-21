@@ -1,3 +1,4 @@
+import express from 'express';
 import 'module-alias/register';
 import 'source-map-support/register';
 import dotenv from 'dotenv';
@@ -28,7 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const safeMongooseConnection = new SafeMongooseConnection({
-  mongoUrl: "process.env.MONGO_URL" || "",
+  mongoUrl: process.env.MONGO_URL || "",
   debugCallback,
   onStartConnection: mongoUrl => logger.info(`Connecting to MongoDB at ${mongoUrl}`),
   onConnectionError: (error, mongoUrl) => logger.log({
