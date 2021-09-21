@@ -14,6 +14,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "nexthandle-backend" #Must be unique in Heroku
           heroku_email: "ikadismile@gmail.com"
-          env:
-            MONGO_URL: ${{secrets.MONGO_URL}}
-            PORT: ${{secrets.PORT}}
+        env:
+          MONGO_URL: ${{secrets.MONGO_URL}}
+          PORT: ${{secrets.PORT}}
