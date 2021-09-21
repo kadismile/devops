@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  NextHandleBackend:
+    container_name: NextHandleBackend-dev
+    command: yarn dev -L

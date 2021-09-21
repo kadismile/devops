@@ -1,0 +1,6 @@
+version: '1'
+
+services:
+  NextHandleBackend:
+    container_name: NextHandleBackend-test
+    command: yarn test
