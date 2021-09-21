@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const safeMongooseConnection = new SafeMongooseConnection({
-  mongoUrl: "mongodb+srv://admin:LSw6xkn9HV1PhHlm@nexthandlesandbox.ashk2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority" || "",
+  mongoUrl: "process.env.MONGO_URL" || "",
   debugCallback,
   onStartConnection: mongoUrl => logger.info(`Connecting to MongoDB at ${mongoUrl}`),
   onConnectionError: (error, mongoUrl) => logger.log({
