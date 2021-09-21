@@ -21,12 +21,14 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
     });
   }
   if (phoneNumber || email) {
-    // @ts-ignore
     try {
-      if (phoneNumber.startsWith("0")) {
+      if (phoneNumber?.startsWith("0")) {
         phoneNumber = "+234" + phoneNumber.split("").splice(1).join("")
       }
-      const user: any = await User.findOne( { $or:[ { email }, { phoneNumber: { $in: phoneNumber} } ] }).select('+password');
+      const user: any = await User.findOne( { $or:[
+          { email },
+          { phoneNumber: { $in: phoneNumber} } ] })
+          .select('+password');
       if (!user) {
         res.status(401).json({
           data: "Invalid credentials"
@@ -45,9 +47,8 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
           token
         });
       }
-      // @ts-ignore
     } catch (e: any) {
-      throw new ApplicationError(e, 500)
+      throw new ApplicationError(e.message, 500)
     }
   }
 };
