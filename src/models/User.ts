@@ -91,10 +91,10 @@ schema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-schema.methods.getSignedJwtToken = function() {
+schema.methods.getSignedJwtToken = function(expires) {
   const JWT_SECRET = accessEnv("JWT_SECRET")
   return jwt.sign({ _id: this._id}, JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: expires ? expires : process.env.JWT_EXPIRE
   });
 };
 
