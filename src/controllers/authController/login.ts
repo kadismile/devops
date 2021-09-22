@@ -2,8 +2,6 @@ import { Request, RequestHandler } from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
-import bcrypt from 'bcryptjs';
-import accessEnv from '../../helpers/accessEnv';
 import ApplicationError from '../../errors/application-error';
 
 export const LoginSchema = Joi.object().keys({
