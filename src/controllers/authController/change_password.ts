@@ -1,0 +1,49 @@
+import requestMiddleware from '../../middleware/request-middleware';
+import User from '../../models/User';
+import Joi from "@hapi/joi";
+import {Request, RequestHandler} from "express";
+import bcrypt, {compare, hash} from "bcryptjs";
+var kue = require('kue')
+
+export const ChangePasswordSchema = Joi.object().keys({
+  oldPassword: Joi.string().required(),
+  newPassword: Joi.string().required(),
+  resetPasswordToken: Joi.string().required()
+});
+
+const changePassword: RequestHandler = async (req: Request<{}, {}>, res) => {
+  let { oldPassword, newPassword, resetPasswordToken } = req.body;
+  const user: any =  await User.findOne({ resetPasswordToken: resetPasswordToken }).select('+password')
+  if (user) {
+    let verify
+    try {
+      verify = await compare(oldPassword, user.password);
+    } catch (e: any) {
+
+    }
+
+    if (!verify) {
+      res.status(403).json({
+        message: "Wrong Current Password Providedss"
+      });
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      newPassword = await bcrypt.hash(newPassword, salt);
+      await User.findByIdAndUpdate(user._id, {
+        resetPasswordToken: "null", password: newPassword }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+      });
+      res.status(200).json({
+        message: "Password Recovered Successfully"
+      });
+    }
+  } else {
+    res.status(401).json({
+      message: "No user found"
+    });
+  }
+};
+
+export default requestMiddleware(changePassword, { validation: { body: ChangePasswordSchema } });
