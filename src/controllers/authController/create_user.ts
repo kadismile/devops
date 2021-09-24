@@ -9,6 +9,7 @@ export const addUserSchema = Joi.object().keys({
   fullName: Joi.string().required(),
   password: Joi.string().required(),
   phoneNumber: Joi.string().required(),
+  userType: Joi.string().valid(...['customer','admin']).required(),
   email: Joi.string().required().email({ tlds: { allow: false } }),
   address: Joi.object({
     country: Joi.string().required(),

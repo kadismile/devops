@@ -15,7 +15,16 @@ const UserBeforeSave = async (doc: IUser ) => {
     const salt = await bcrypt.genSalt(10);
     doc.password = await bcrypt.hash(doc.password, salt);
   }
+
+  if (doc.userType === "customer") {
+    doc.customerNumber = await getNextSequenceValue()
+  }
   return doc
+}
+
+const getNextSequenceValue = async () => {
+  let user: any = await User.findOne({}, {}, {sort: { createdAt : -1 }});
+  return user.customerNumber++;
 }
 
 export default UserBeforeSave
