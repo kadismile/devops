@@ -3,6 +3,8 @@ import { ITimeStampedDocument } from './models/plugins/timestamp-plugin';
 export interface IUser extends ITimeStampedDocument {
   name: string;
   email: string;
+  customerNumber: number,
+  userType: string,
   fullName: string,
   phoneNumber: [string],
   userNumber: number,

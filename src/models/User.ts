@@ -28,8 +28,13 @@ const schema = new Schema<IUser>({
     type : Array,
     default : [],
   },
-  userNumber: {
+  customerNumber: {
     type: Number,
+    default : 1000,
+    optional: true,
+  },
+  userType: {
+    type: String,
   },
   accountBalance: {
     type: Number,
@@ -59,7 +64,7 @@ const schema = new Schema<IUser>({
     optional: true,
   },
   roles: {
-    type : Array ,
+    type : Array,
     default : [],
     optional: true,
   },
