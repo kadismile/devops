@@ -2,8 +2,7 @@ import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
 import Joi from "@hapi/joi";
 import {Request, RequestHandler} from "express";
-import bcrypt, {compare, hash} from "bcryptjs";
-var kue = require('kue')
+import {compare} from "bcryptjs";
 
 export const ChangePasswordSchema = Joi.object().keys({
   oldPassword: Joi.string().required(),
@@ -21,14 +20,11 @@ const changePassword: RequestHandler = async (req: Request<{}, {}>, res) => {
     } catch (e: any) {
 
     }
-
     if (!verify) {
       res.status(403).json({
-        message: "Wrong Current Password Providedss"
+        message: "Wrong Current Password Provided"
       });
     } else {
-      const salt = await bcrypt.genSalt(10);
-      newPassword = await bcrypt.hash(newPassword, salt);
       await User.findByIdAndUpdate(user._id, {
         resetPasswordToken: "null", password: newPassword }, {
         new: true,
