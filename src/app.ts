@@ -32,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Routes
 app.use('/api/v1/users', routes.user_routes);
+app.use('/api/v1/vendors', routes.vendor_routes);
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
