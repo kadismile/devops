@@ -1,9 +1,12 @@
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import swaggerJsDoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 import express, { Request, Response, NextFunction } from 'express';
 import ApplicationError from './errors/application-error';
 import * as routes from './routes/index';
 import logger from './logger';
+import accessEnv from "./helpers/accessEnv";
 
 const app = express();
 
@@ -29,6 +32,22 @@ app.use(logResponseTime);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const swaggerOptions: any = {
+  swaggerDefinition: {
+    info: {
+      title: "Next-handle API Docs",
+      description: "APi documentation for next handle",
+      contact: {
+        name: "Kadismile"
+      },
+      servers: [accessEnv("DOMAIN_URL")]
+    }
+  },
+  apis: ["./src/documentations/*.ts"]
+}
+const swaggerDocs = swaggerJsDoc(swaggerOptions)
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 //Routes
 app.use('/api/v1/users', routes.user_routes);

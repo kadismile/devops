@@ -6,7 +6,7 @@ const getTimeStampString = () => new Date(Date.now()).toISOString();
 export const STYLES = {
   ERROR: chalk.bold.red,
   WARN: chalk.keyword('orange'),
-  INFO: chalk.hex('#c4c64f'),
+  INFO: chalk.hex('#abac72'),
   VERBOSE: chalk.hex('#6435c9'),
   DEBUG: chalk.hex('#2185d0'),
   SILLY: chalk.hex('#f011ce')

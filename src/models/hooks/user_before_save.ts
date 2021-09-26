@@ -12,12 +12,11 @@ const UserBeforeSave = async (doc: IUser ) => {
     throw new ApplicationError(`User with Email ${doc.email} already exist`, 406)
 
   if (doc.password) {
-    console.log(" we got here pretty beforeSave ----> ")
     const salt = await bcrypt.genSalt(10);
     doc.password = await bcrypt.hash(doc.password, salt);
   }
 
-  if (doc.userType) {
+  if (doc.userType === "customer") {
     doc.customerNumber = await getNextSequenceValue()
   }
   return doc
@@ -25,7 +24,11 @@ const UserBeforeSave = async (doc: IUser ) => {
 
 const getNextSequenceValue = async () => {
   let user: any = await User.findOne({}, {}, {sort: { createdAt : -1 }});
-  return user.customerNumber++;
+  if (!user) {
+    return 1000;
+  } else {
+    return user.customerNumber+=1
+  }
 }
 
 export default UserBeforeSave

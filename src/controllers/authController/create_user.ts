@@ -3,7 +3,6 @@ import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
 import prepareValidPhoneNumber from '../../helpers/prepareValidPhoneNumber';
-import ApplicationError from "../../errors/application-error";
 
 export const addUserSchema = Joi.object().keys({
   fullName: Joi.string().required(),
@@ -20,6 +19,15 @@ export const addUserSchema = Joi.object().keys({
   }).required(),
 });
 
+/**
+ * @swagger
+ * /create
+ *  post:
+ *     description: Used for creating a user
+ *     responses:
+ *      '200':
+ *        description: A successful response
+ */
 const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
     try {
