@@ -73,8 +73,3 @@ process.on('SIGINT', () => {
     process.exit(0);
   }, true);
 });
-
-/*const app = express();
-app.listen(4000, () => {
-  console.log(`server running on port 4000`);
-});*/
