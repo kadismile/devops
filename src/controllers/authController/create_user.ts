@@ -3,6 +3,8 @@ import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
 import prepareValidPhoneNumber from '../../helpers/prepareValidPhoneNumber';
+import kue from "kue";
+import Mailer from "../../helpers/mailer";
 
 export const addUserSchema = Joi.object().keys({
   fullName: Joi.string().required(),
@@ -19,21 +21,23 @@ export const addUserSchema = Joi.object().keys({
   }).required(),
 });
 
-/**
- * @swagger
- * /create
- *  post:
- *     description: Used for creating a user
- *     responses:
- *      '200':
- *        description: A successful response
- */
 const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
     try {
       doc.phoneNumber = [prepareValidPhoneNumber(doc)];
       const user = new User(req.body);
       await user.save();
+      const queues = kue.createQueue();
+      const type = "WelcomeEmailJob"
+      queues
+        .create(type, {
+          email: user.email,
+          fullName: user.fullName,
+          subject: 'Welcome To Next-Handle',
+        })
+        .priority("high")
+        .save();
+      await Mailer.sendMail(type, 'welcome-email')
       res.send({
         data: user.toJSON()
       });
