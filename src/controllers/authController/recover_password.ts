@@ -1,12 +1,12 @@
 import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
+import  Mailer from '../../helpers/mailer'
 import accessEnv from '../../helpers/accessEnv';
 import ApplicationError from '../../errors/application-error';
 import Joi from "@hapi/joi";
 import {Request, RequestHandler} from "express";
-import {sendEmail} from "../../helpers/send-email";
 import {compare, hash} from "bcryptjs";
-var kue = require('kue')
+import kue from "kue";
 
 export const RecoverPasswordSchema = Joi.object().keys({
   email: Joi.string().email({ tlds: { allow: false } }),
@@ -15,7 +15,6 @@ export const RecoverPasswordSchema = Joi.object().keys({
 const recoverPassword: RequestHandler = async (req: Request<{}, {}>, res) => {
   let { email } = req.body;
   const user: any =  await User.findOne({ email: email })
-  console.log("User--> ", user)
   if (user) {
     const resetPasswordToken = user.getSignedJwtToken("1h");
     await User.findByIdAndUpdate(user._id, {
@@ -34,12 +33,12 @@ const recoverPassword: RequestHandler = async (req: Request<{}, {}>, res) => {
     queues
       .create(type, {
         email: user.email,
-        subject: 'Password reset token',
+        subject: 'Password Reset',
         resetPasswordUrl
       })
       .priority("high")
       .save();
-    await sendEmail(type);
+    await Mailer.sendMail(type, 'password-reset')
     res.status(200).json({
       message: `Password Recovery Email Sent To ${email}`
     });
