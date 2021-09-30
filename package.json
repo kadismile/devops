@@ -35,7 +35,7 @@
   "homepage": "https://github.com/kadismile/devops#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@sendgrid/mail": "^7.4.2",
+    "@sendgrid/mail": "^7.4.7",
     "@types/bcryptjs": "^2.4.2",
     "@types/compression": "^1.7.2",
     "@types/google-libphonenumber": "^7.4.21",
