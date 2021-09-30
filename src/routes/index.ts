@@ -1,7 +1,15 @@
-import user_routes from './user_routes';
-import vendor_routes from './vendor_routes';
+import  express from 'express'
+const router = express.Router()
 
-export {
-  user_routes,
-  vendor_routes
-};
+router.get('/', function(req, res, next) {
+  res.sendStatus(200)
+})
+router.get('/api/ping', function(req, res, next) {
+  res.sendStatus(200)
+})
+
+module.exports = router
+
+
+
+

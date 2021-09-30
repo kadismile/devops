@@ -4,7 +4,8 @@ import swaggerJsDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import express, { Request, Response, NextFunction } from 'express';
 import ApplicationError from './errors/application-error';
-import * as routes from './routes/index';
+// @ts-ignore
+import routerConfig from './routes/config'
 import logger from './logger';
 import accessEnv from "./helpers/accessEnv";
 
@@ -50,8 +51,11 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions)
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 //Routes
-app.use('/api/v1/users', routes.user_routes);
-app.use('/api/v1/vendors', routes.vendor_routes);
+routerConfig.forEach((rou: any[]) => {
+  let route = rou[0]
+  let router = rou[1]
+  app.use(route, router)
+})
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
