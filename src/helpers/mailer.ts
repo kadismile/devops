@@ -34,7 +34,8 @@ class Mailer {
     const emailTemplate = handlebars.compile(source);
     try {
       self.queue.process(type, function (job: any, done: any) {
-        const emailData = job.data
+        const emailData: any = job.data
+        emailData.year =  new Date().getFullYear()
         const htmlToSend = emailTemplate(emailData);
         const message = {
           from: `${self.FROM_NAME} <${self.FROM_EMAIL}>`,
