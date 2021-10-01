@@ -30,3 +30,14 @@ export interface IVendor extends ITimeStampedDocument {
   history: [object],
   businessAddress: { phoneNumber: string, countryCode: string },
 }
+
+export interface IProduct extends ITimeStampedDocument {
+  name: string,
+  description: string,
+  productTypeId: string,
+  productType: string,
+  categoryId: string,
+  category: string,
+  status: string,
+  productImage: string
+}
