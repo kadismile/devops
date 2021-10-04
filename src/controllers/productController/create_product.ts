@@ -85,5 +85,4 @@ const saveAttachments = async (urlAttachments: any, product: any, doc: any) => {
     product: prod
   }
 }
-
 export default requestMiddleware(create_product, { validation: { body: addProductSchema } });
