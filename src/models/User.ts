@@ -1,4 +1,5 @@
 import { Model, Schema, model } from 'mongoose';
+import mongoose from 'mongoose'
 import TimeStampPlugin from './plugins/timestamp-plugin';
 import  UserAfterUpdate   from './hooks/user_after_update'
 import  UserBeforeSave   from './hooks/user_before_save'
@@ -78,10 +79,34 @@ const schema = new Schema<IUser>({
       return false;
     }
   },
+  isActive: {
+    type: Boolean,
+    default: function() {
+      return true;
+    }
+  },
+  isVerified: {
+    type: Boolean,
+    default: function() {
+      return false;
+    }
+  },
+  attachments: [{
+    type: String,
+    ref: 'Attachment'
+  }]
 },{versionKey: false});
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
 schema.plugin(TimeStampPlugin);
+
+schema.pre('findOne', async function() {
+  this.where({ isActive: true })
+});
+
+schema.pre('find', async function() {
+  this.where({ isActive: true })
+});
 
 schema.pre('findOneAndUpdate', async function(this, next) {
   await UserAfterUpdate(this, next)
