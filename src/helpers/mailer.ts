@@ -25,7 +25,13 @@ class Mailer {
       pass: this.GMAIL_PASSWORD
     }
   });
-  private queue = kue.createQueue();
+
+  private queue = kue.createQueue(
+    {
+      redis: 'redis://:p2d6128557ad6475d4fe94217ecb4ebeabe73aed38edea389edc5a42174a53825@ec2-44-196-100-58.compute-1.amazonaws.com:30789'
+    }
+  );
+
 
   async sendMail(type: string, templateName: string) {
     let self = this
