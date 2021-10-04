@@ -6,7 +6,8 @@ const UserAfterUpdate = async ( model: any, next: any) => {
   const oldDoc: any = await User.findById(model._conditions._id);
   const newDoc: any = model._update
 
-  if (oldDoc.fullName !== newDoc.fullName) {
+  if ( newDoc.fullName !== null && oldDoc.fullName !== newDoc.fullName  ) {
+    console.log("====================> Name-Change")
     try{
       await User.updateOne({ _id: oldDoc._id },
         { $addToSet: {history: {

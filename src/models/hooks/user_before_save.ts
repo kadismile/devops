@@ -14,6 +14,7 @@ const UserBeforeSave = async (doc: IUser ) => {
   if (doc.password) {
     const salt = await bcrypt.genSalt(10);
     doc.password = await bcrypt.hash(doc.password, salt);
+    doc.isActive = true
   }
 
   if (doc.userType === "customer") {

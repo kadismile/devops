@@ -16,7 +16,9 @@ export interface IUser extends ITimeStampedDocument {
   verifyEmailToken: string,
   roles: [string],
   history: [object],
-  superAdmin: boolean
+  superAdmin: boolean,
+  isActive: boolean,
+  isVerified: boolean
 }
 
 export interface IVendor extends ITimeStampedDocument {
@@ -40,4 +42,5 @@ export interface IProduct extends ITimeStampedDocument {
   category: string,
   status: string,
   productImage: string
+  uploadedAt: string
 }

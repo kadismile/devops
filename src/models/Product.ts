@@ -28,13 +28,14 @@ const schema = new Schema<IProduct>({
   category: {
     type: String
   },
-  productImage: {
-    type: String
+  user: {
+    type: String,
+    ref: 'User'
   },
-  productVariant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'ProductVariant'
-  }
+  attachments: [{
+    type: String,
+    ref: 'Attachment'
+  }]
 },{versionKey: false});
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
