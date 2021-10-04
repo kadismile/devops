@@ -44,7 +44,7 @@ const schema = new Schema<IUser>({
     }
   },
   address: {
-    type : Array,
+    type : Object,
     required: [true, 'Please add an address']
   },
   password: {

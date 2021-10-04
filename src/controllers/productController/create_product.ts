@@ -27,8 +27,8 @@ const create_product: RequestHandler = async (req: Request<{}, {}>, res) => {
         category: "smart phones",
         userId: "WhMDpxEosk4taTkZEyRO36m0A"
       }
-    /*await Attachment.deleteMany({})
-    await Product.deleteMany({})*/
+    await Attachment.deleteMany({})
+    await Product.deleteMany({})
     let files: any = req.files;
     if (!files || files.length === 0) {
       res.status(403).json({
@@ -63,7 +63,7 @@ const uploadAttachments = async (files: any, doc: any) => {
         createdAt: moment().toISOString(),
         updatedAt: moment().toISOString(),
       })
-      fs.unlinkSync(path)
+      await fs.unlinkSync(path)
     }
   }
   if (urls.length > 0)
