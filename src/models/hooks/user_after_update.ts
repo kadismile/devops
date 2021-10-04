@@ -6,8 +6,7 @@ const UserAfterUpdate = async ( model: any, next: any) => {
   const oldDoc: any = await User.findById(model._conditions._id);
   const newDoc: any = model._update
 
-  if ( newDoc.fullName !== null && oldDoc.fullName !== newDoc.fullName  ) {
-    console.log("====================> Name-Change")
+  if (newDoc.fullName && oldDoc.fullName !== newDoc.fullName  ) {
     try{
       await User.updateOne({ _id: oldDoc._id },
         { $addToSet: {history: {
@@ -21,7 +20,7 @@ const UserAfterUpdate = async ( model: any, next: any) => {
     }
   }
 
-  if (newDoc.address && oldDoc.address !== newDoc.address){
+  if (newDoc.address && addressChanged (oldDoc.address, newDoc.address)){
     try{
       await User.updateOne({ _id: oldDoc._id },
         {$addToSet: {history: {
@@ -55,5 +54,15 @@ const UserAfterUpdate = async ( model: any, next: any) => {
     }
   }
 };
+
+const addressChanged: any = (oldDAddress: any, newAddress: any) => {
+  let oldValues = Object.values(oldDAddress)
+  let newValues = Object.values(newAddress)
+  let change = false
+  for (let i = 0; i < oldValues.length; i++) {
+    change = oldValues.includes(newValues[i]);
+  }
+  return change
+}
 
 export default UserAfterUpdate;

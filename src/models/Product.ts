@@ -25,6 +25,12 @@ const schema = new Schema<IProduct>({
   categoryId: {
     type: String,
   },
+  marketPrice: {
+    type: Number,
+  },
+  salesPrice: {
+    type: Number,
+  },
   category: {
     type: String
   },
