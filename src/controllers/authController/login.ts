@@ -42,7 +42,8 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
         const token = user.getSignedJwtToken();
         res.status(200).json({
           status: "success",
-          token
+          token,
+          user
         });
       }
     } catch (e: any) {
