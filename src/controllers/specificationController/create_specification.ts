@@ -57,7 +57,6 @@ const createMultipleSpecifications = async (docs: any) => {
   })
   let specifications = await Specification.insertMany(spec)
   let specificationIds = _.map(specifications, '_id')
-  console.log("specificationIds =======>", specificationIds)
 
   await Specification.updateMany(
     { _id: { $in: specificationIds } },

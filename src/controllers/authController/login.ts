@@ -40,7 +40,7 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
         });
       } else {
         const token = user.getSignedJwtToken();
-        res.status(200).json({
+        res.status(201).json({
           status: "success",
           token,
           user
