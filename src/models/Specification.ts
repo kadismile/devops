@@ -2,21 +2,21 @@ import { Model, Schema, model } from 'mongoose';
 import TimeStampPlugin from './plugins/timestamp-plugin';
 import {IProduct} from "../types";
 
-interface ICategoryModel extends Model<IProduct> { }
+interface ISpecificationModel extends Model<IProduct> { }
 const schema = new Schema<IProduct>({
   name: {
     type: String,
     unique: true,
     required: [true, 'name is required']
   },
-  specifications: [{
+  categories: [{
     type: String,
-    ref: 'Specification'
+    ref: 'Category'
   }],
 },{versionKey: false});
 
 schema.plugin(TimeStampPlugin);
 
-const Category: ICategoryModel = model<IProduct, ICategoryModel>('Category', schema);
+const Specification: ISpecificationModel = model<IProduct, ISpecificationModel>('Specification', schema);
 
-export default Category;
+export default Specification;

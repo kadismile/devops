@@ -11,13 +11,10 @@ const schema = new Schema<IProduct>({
     unique: true,
     required: [true, 'name is required']
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
+  product: {
+    type: String,
+    ref: 'Product',
+    required: [true, 'kindly provide a product identifier']
   },
 },{versionKey: false});
 
