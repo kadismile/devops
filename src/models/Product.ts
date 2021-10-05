@@ -10,7 +10,7 @@ const schema = new Schema<IProduct>({
     type: String,
     required: [true, 'Please Add product name']
   },
-  description: {
+  otherInformation: {
     type: String,
     required: [true, 'Please Add description']
   },
@@ -20,19 +20,10 @@ const schema = new Schema<IProduct>({
   },
   productType: {
     type: String,
-    //required: [true, 'Please Add product type']
+    required: [true, 'Please Add product type']
   },
-  categoryId: {
-    type: String,
-  },
-  marketPrice: {
+  price: {
     type: Number,
-  },
-  salesPrice: {
-    type: Number,
-  },
-  category: {
-    type: String
   },
   user: {
     type: String,
@@ -40,8 +31,22 @@ const schema = new Schema<IProduct>({
   },
   attachments: [{
     type: String,
-    ref: 'Attachment'
-  }]
+    ref: 'Attachment',
+    required: [true, 'kindly provide attachments identifier']
+  }],
+  category: {
+    type: String,
+    ref: 'Category',
+    required: [true, 'kindly provide a category identifier']
+  },
+  specifications: {
+    type : Array,
+    default : [],
+  },
+  conditions: {
+    type : Array,
+    default : [],
+  },
 },{versionKey: false});
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
