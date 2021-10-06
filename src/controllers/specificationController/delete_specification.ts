@@ -6,14 +6,23 @@ import Specification from '../../models/Specification';
 
 export const specificationSchema = Joi.object().keys({
   specificationId: Joi.string().required(),
+  user: Joi.object().required()
 });
 
 const delete_specification: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
   try {
-    await Specification.findOneAndRemove({ _id: doc.specificationId });
+    let specification: any = await Specification.findById(doc.specificationId)
+    if (!specification) {
+      res.status(404).json({
+        status: "failed",
+        message: "specification not found"
+      });
+    }
+    await Specification.findByIdAndDelete(doc.specificationId);
     res.status(200).json({
-      message: "category deleted"
+      status: "success",
+      message: "specification deleted"
     });
   } catch (e: any) {
     res.status(403).json({
