@@ -11,7 +11,8 @@ import moment from "moment";
 export const addSpecificationSchema = Joi.object().keys({
   name: Joi.string(),
   categoryId: Joi.array(),
-  specifications: Joi.array()
+  specifications: Joi.array(),
+  user: Joi.object().required()
 });
 
 const create_specification: RequestHandler = async (req: Request<{}, {}>, res) => {

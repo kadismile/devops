@@ -25,12 +25,10 @@ const protect = async (req: any, res: any, next: any) => {
       }
       req.body.user = await User.findOne({ _id: decoded._id});
       next();
-
     } catch (e) {
       // @ts-ignore
       next (new ApplicationError(e.message, 500))
     }
-    // @ts-ignore
   } catch (err: any) {
     next(new ApplicationError(err.message, 500))
   }

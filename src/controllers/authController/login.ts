@@ -40,10 +40,11 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
         });
       } else {
         const token = user.getSignedJwtToken();
+        console.log("USER ", user.password)
         res.status(201).json({
           status: "success",
           token,
-          user
+          user: await User.findOne({ _id: user._id })
         });
       }
     } catch (e: any) {
