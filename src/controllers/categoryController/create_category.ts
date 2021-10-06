@@ -8,10 +8,12 @@ import axios from "axios"
 export const addCategorySchema = Joi.object().keys({
   name: Joi.string().required(),
   specifications: Joi.array().required(),
+  user: Joi.object().required(),
 });
 
 const create_category: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
+  let token: any = req.headers.authorization
   try {
    let category = new Category({ name: doc.name });
     await category.save()
@@ -20,7 +22,7 @@ const create_category: RequestHandler = async (req: Request<{}, {}>, res) => {
       categoryId: [category._id]
     }
     doc.categoryId = category.id
-    await createSpecifications(specDocs)
+    await createSpecifications(specDocs, token)
 
     res.status(201).json({
       data: await Category.findById(category._id).populate("specifications", { name: 1})
@@ -33,11 +35,17 @@ const create_category: RequestHandler = async (req: Request<{}, {}>, res) => {
   }
 };
 
-const createSpecifications = async (doc: any) => {
+const createSpecifications = async (doc: any, token: string) => {
   let response
   try {
     const DOMAIN_URL = accessEnv("DOMAIN_URL")
-    const resp = await axios.post(`${DOMAIN_URL}/api/v1/specification/create`, doc);
+    const resp = await axios({
+      method: 'post',
+      url: `${DOMAIN_URL}/api/v1/specification/create`,
+      data: doc,
+      headers: {
+        Authorization: token
+      }})
     response = resp.data
   } catch (err: any) {
     response = err.response.data

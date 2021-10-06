@@ -17,6 +17,7 @@ export const addSpecificationSchema = Joi.object().keys({
 
 const create_specification: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
+  console.log("-------------------> body ", doc)
   try {
     let multiSpecifications
     let updatedDoc
@@ -31,9 +32,6 @@ const create_specification: RequestHandler = async (req: Request<{}, {}>, res) =
         { new: true, useFindAndModify: false }
       )
     }
-
-    console.log("multiSpecifications ===>", multiSpecifications)
-    console.log("updatedDoc ===>", updatedDoc)
 
     res.status(200).json({
       status: "success",
