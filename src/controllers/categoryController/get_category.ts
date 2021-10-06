@@ -6,15 +6,16 @@ import Category from "../../models/Category";
 
 export const categorySchema = Joi.object().keys({
   categoryId: Joi.string().required(),
+  user: Joi.object().required()
 });
 
 const get_category: RequestHandler = async (req: Request, res) => {
   let doc = req.body
   let category
   if (doc.categoryId) {
-    category = Category.findById(doc.categoryId)
+    category = await Category.findById(doc.categoryId).populate("specifications", { name: 1, _id: 0})
   } else {
-    category = Category.find({})
+    category = await Category.find({})
   }
   return res.status(200).send({
     data: category

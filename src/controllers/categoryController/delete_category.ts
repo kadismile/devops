@@ -3,7 +3,6 @@ import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import Category from '../../models/Category';
 
-
 export const categorySchema = Joi.object().keys({
   categoryId: Joi.string().required(),
   user: Joi.object().required()
