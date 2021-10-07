@@ -11,6 +11,7 @@ const get_product: RequestHandler = async (req: Request, res) => {
   let doc = req.body
   let product = await  Product.findById(doc.productId).populate("attachments")
   return res.status(200).send({
+    status: "success",
     data: product
   });
 };

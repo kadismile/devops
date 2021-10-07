@@ -18,6 +18,7 @@ const get_category: RequestHandler = async (req: Request, res) => {
     category = await Category.find({})
   }
   return res.status(200).send({
+    status: "success",
     data: category
   });
 };

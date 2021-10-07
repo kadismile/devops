@@ -22,6 +22,7 @@ const changePassword: RequestHandler = async (req: Request<{}, {}>, res) => {
     }
     if (!verify) {
       res.status(403).json({
+        status: "failed",
         message: "Wrong Current Password Provided"
       });
     } else {
@@ -32,11 +33,13 @@ const changePassword: RequestHandler = async (req: Request<{}, {}>, res) => {
         useFindAndModify: false
       });
       res.status(200).json({
+        status: "success",
         message: "Password Recovered Successfully"
       });
     }
   } else {
     res.status(401).json({
+      status: "success",
       message: "No user found"
     });
   }

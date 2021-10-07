@@ -12,10 +12,10 @@ const create_product_type: RequestHandler = async (req: Request<{}, {}>, res) =>
   try {
     const pType = new ProductType(req.body);
     await pType.save();
-    res.send({
+    res.status(403).json({
+      status: "success",
       data: pType
     });
-
   } catch (e: any) {
     res.status(403).json({
       status: "failed",

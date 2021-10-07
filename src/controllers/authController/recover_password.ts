@@ -40,11 +40,13 @@ const recoverPassword: RequestHandler = async (req: Request<{}, {}>, res) => {
       .save();
     await Mailer.sendMail(type, 'password-reset')
     res.status(200).json({
+      status: "success",
       message: `Password Recovery Email Sent To ${email}`
     });
 
   } else {
     res.status(401).json({
+      status: "failed",
       message: "No user found With That Email"
     });
   }

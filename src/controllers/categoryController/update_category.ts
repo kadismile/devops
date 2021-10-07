@@ -17,6 +17,7 @@ const update_category: RequestHandler = async (req: Request<{}, {}>, res) => {
       { new: true, useFindAndModify: false }
     )
     res.status(200).json({
+      status: "success",
       data: category
     });
   } catch (e: any) {

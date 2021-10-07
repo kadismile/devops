@@ -81,6 +81,7 @@ const saveAttachments = async (urlAttachments: any, product: any, doc: any) => {
     { new: true, useFindAndModify: false }
   )
   return {
+    status: "success",
     user,
     product: prod
   }

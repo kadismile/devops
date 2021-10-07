@@ -25,6 +25,7 @@ const create_category: RequestHandler = async (req: Request<{}, {}>, res) => {
     await createSpecifications(specDocs, token)
 
     res.status(201).json({
+      status: "success",
       data: await Category.findById(category._id).populate("specifications", { name: 1})
     });
   } catch (e: any) {
