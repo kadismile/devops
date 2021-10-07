@@ -20,6 +20,7 @@ const delete_category: RequestHandler = async (req: Request<{}, {}>, res) => {
     }
     await Category.findOneAndRemove({ _id: doc.categoryId });
     res.status(200).json({
+      status: "success",
       message: "category deleted"
     });
   } catch (e: any) {

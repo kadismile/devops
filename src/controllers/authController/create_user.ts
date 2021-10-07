@@ -39,6 +39,7 @@ const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
         .save();
       await Mailer.sendMail(type, 'welcome-email')
       res.send({
+        status: "success",
         data: user.toJSON()
       });
     } catch (e: any) {

@@ -32,7 +32,8 @@ const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
         user: newUser
       });
     } else {
-      res.send({
+      res.status(403).json({
+        status: "success",
         data: newUser.data
       });
     }
