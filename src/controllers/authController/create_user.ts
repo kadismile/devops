@@ -5,6 +5,8 @@ import User from '../../models/User';
 import prepareValidPhoneNumber from '../../helpers/prepareValidPhoneNumber';
 import kue from "kue";
 import Mailer from "../../helpers/mailer";
+import accessEnv from "../../helpers/accessEnv";
+import axios from "axios";
 
 export const addUserSchema = Joi.object().keys({
   fullName: Joi.string().required(),
@@ -37,10 +39,14 @@ const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
         })
         .priority("high")
         .save();
+      let loggedInUser
+      if (user) {
+        loggedInUser = await LoginUser(doc)
+      }
       await Mailer.sendMail(type, 'welcome-email')
       res.send({
         status: "success",
-        data: user.toJSON()
+        data: loggedInUser
       });
     } catch (e: any) {
       res.status(403).json({
@@ -49,5 +55,23 @@ const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
       });
     }
 };
+
+const LoginUser = async (doc: any) => {
+  const { email, password } = doc
+  let response
+  try {
+    const DOMAIN_URL = accessEnv("DOMAIN_URL")
+    const resp = await axios({
+      method: 'post',
+      url: `${DOMAIN_URL}/api/v1/users/login`,
+      data: { email, password }
+    })
+    response = resp.data
+  } catch (err: any) {
+    response = err.response.data
+  }
+  delete response?.status
+  return response
+}
 
 export default requestMiddleware(create_user, { validation: { body: addUserSchema } });
