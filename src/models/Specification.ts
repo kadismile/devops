@@ -13,6 +13,12 @@ const schema = new Schema<IProduct>({
     type: String,
     ref: 'Category'
   }],
+  isActive: {
+    type: Boolean,
+    default: function() {
+      return true;
+    }
+  },
 },{versionKey: false});
 
 schema.plugin(TimeStampPlugin);

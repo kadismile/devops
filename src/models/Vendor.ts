@@ -35,6 +35,11 @@ const schema = new Schema<IVendor>({
     type : Array,
     required: [true, 'Please add an address']
   },
+  user: {
+    type: String,
+    ref: 'User',
+    required: [true, "kindly provide a a userId"]
+  },
   history: {
     type: Array,
     optional: true,

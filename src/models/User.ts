@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
 import accessEnv from '../helpers/accessEnv';
 import { IUser } from '../types';
 
-
 interface IUserModel extends Model<IUser> { }
 
 const schema = new Schema<IUser>({
@@ -36,6 +35,11 @@ const schema = new Schema<IUser>({
   },
   userType: {
     type: String,
+    required: [true, "kindly provide a usertype"]
+  },
+  vendor: {
+    type: String,
+    ref: 'Vendor',
   },
   accountBalance: {
     type: Number,
@@ -50,7 +54,6 @@ const schema = new Schema<IUser>({
   password: {
     type: String,
     select: false, //dont show the password
-    min: [4, 'password too short'],
   },
   resetPasswordToken: {
     type: String,

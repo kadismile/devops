@@ -1,5 +1,4 @@
 import { Model, Schema, model } from 'mongoose';
-import mongoose from 'mongoose'
 import TimeStampPlugin from './plugins/timestamp-plugin';
 import {IProduct, IUser} from "../types";
 

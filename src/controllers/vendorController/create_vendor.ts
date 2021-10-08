@@ -2,8 +2,7 @@ import {Request, RequestHandler} from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import Vendor from '../../models/Vendor';
-import accessEnv from '../../helpers/accessEnv';
-import axios from "axios"
+import { createUser } from '../../helpers/createUser'
 
 export const addVendorSchema = Joi.object().keys({
   businessName: Joi.string().required(),
@@ -23,18 +22,17 @@ const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
   try {
     let newUser: any = await createUser(doc)
-    if (newUser?.data?._id) {
-      req.body.phoneNumber = newUser.data.phoneNumber
+    if (newUser?._id) {
+      req.body.phoneNumber = newUser.phoneNumber
+      req.body.user = newUser._id
       const vendor = new Vendor(req.body)
       await vendor.save();
-      res.send({
-        vendor: vendor.toJSON(),
-        user: newUser
-      });
-    } else {
-      res.status(403).json({
+      res.status(201).json({
         status: "success",
-        data: newUser.data
+        data: {
+          vendor: vendor.toJSON(),
+          user: newUser
+        }
       });
     }
   } catch (e: any) {
@@ -45,24 +43,6 @@ const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
   }
 };
 
-const createUser = async (doc: any) => {
-  let response
-  const data = {
-    fullName: doc.businessName,
-    password: doc.password,
-    phoneNumber: doc.phoneNumber,
-    userType: "vendor",
-    email: doc.email,
-    address: doc.businessAddress
-  }
-  try {
-    const DOMAIN_URL = accessEnv("DOMAIN_URL")
-    const resp = await axios.post(`${DOMAIN_URL}/api/v1/users/create`, data);
-    response = resp.data
-  } catch (err: any) {
-    response = err.response
-  }
-  return response
-}
+
 
 export default requestMiddleware(create_vendor, { validation: { body: addVendorSchema } });
