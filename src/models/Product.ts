@@ -1,7 +1,5 @@
 import { Model, Schema, model } from 'mongoose';
-import mongoose from 'mongoose'
 import TimeStampPlugin from './plugins/timestamp-plugin';
-import accessEnv from '../helpers/accessEnv';
 import {IProduct, IUser} from "../types";
 
 interface IProductModel extends Model<IProduct> { }
@@ -10,13 +8,13 @@ const schema = new Schema<IProduct>({
     type: String,
     required: [true, 'Please Add product name']
   },
-  otherInformation: {
+  description: {
     type: String,
     required: [true, 'Please Add description']
   },
-  productTypeId: {
+  productVariantId: {
     type: String,
-    //required: [true, 'Please Add product type']
+    ref: 'ProductVariant'
   },
   productType: {
     type: String,
@@ -28,6 +26,10 @@ const schema = new Schema<IProduct>({
   user: {
     type: String,
     ref: 'User'
+  },
+  vendor: {
+    type: String,
+    ref: 'Vendor'
   },
   attachments: [{
     type: String,
@@ -46,6 +48,22 @@ const schema = new Schema<IProduct>({
   conditions: {
     type : Array,
     default : [],
+  },
+  specialOffer: {
+    type: Boolean
+  },
+  specialOfferPercentage: {
+    type: Number,
+  },
+  inSale: {
+    type: Boolean,
+    required: true
+  },
+  isActive: {
+    type: Boolean,
+    default: function() {
+      return true;
+    }
   },
 },{versionKey: false});
 

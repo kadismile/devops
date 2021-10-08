@@ -1,7 +1,7 @@
 import {Request, RequestHandler} from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
-import ProductType from '../../models/ProductType';
+import ProductVariant from '../../models/ProductVariant';
 
 export const addProductSchema = Joi.object().keys({
   name: Joi.string().required(),
@@ -10,7 +10,7 @@ export const addProductSchema = Joi.object().keys({
 const create_product_type: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
   try {
-    const pType = new ProductType(req.body);
+    const pType = new ProductVariant(req.body);
     await pType.save();
     res.status(403).json({
       status: "success",
