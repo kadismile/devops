@@ -67,19 +67,9 @@ const create_product: RequestHandler = async (req: Request<{}, {}>, res) => {
       "condition": "Open-box"
       }
 
-    //const category = await Category.findById(doc.category).select({ specifications: 1 })
     const category = await Category.findById(doc.category)
       .select({ specifications: 1, _id: 0 })
       .populate("specifications", { name: 1, _id: 0})
-
-
-
-    return res.status(200).json({
-      data: category
-    });
-
-    let validSpecification = await validateSpecification(doc)
-
     let files: any = req.files;
     if (!files || files.length === 0) {
       res.status(403).json({
@@ -121,58 +111,6 @@ const uploadAttachments = async (files: any, doc: any) => {
     return urls
 }
 
-/*const validateSpecification = async (doc: any) => {
-  let c = {"specifications" : [{
-    "MPN": "A123456",
-    "Colour": "black",
-    "Unlocked": "true",
-    "Sim card format": "nano sim",
-    "Storage": "125GB",
-    "Memory": "4GB",
-    "Model": "X series",
-    "eSim": "sim",
-    "Processor brand": "intel",
-    "Processor core": "intel",
-    "Megapixels": "220pixels",
-    "OS": "ios",
-    "Resolution": "1245 * 1245",
-    "Screen type": "LED",
-    "Network": "4g",
-    "Release year": "2017",
-    "Double sim": "false",
-    "Memory card slot": "false",
-    "Screen size": "1245",
-    "Connector": "small",
-    "Manufacturing reference number": "A12345",
-    "Foldable": "false",
-    "5G": "false",
-    "Series": "10 series",
-    "Brand" : "iphone x",
-    "Price": 175000,
-    "Battery health": "80*",
-    "Warranty": "4 months",
-    "Condition": "sparingly used"
-  }]}
-  let category: any = await Category.findById(doc.category)
-    .select({ specifications: 1, _id: 0 })
-    .populate("specifications", { name: 1, _id: 0})
-  let specifications = doc.specifications
-
-  let categoryName: any = Object.values(category)
-  let specificationNames: any = Object.keys(specifications)
-  let specificationValues: any = Object.values(specifications)
-
-  let error = false
-  for (let i = 0; i < specificationValues.length; i++) {
-     if (categoryName.includes(specificationNames[i]) ) {
-       error = false
-     } else if( specificationValues[i].length === 0) {
-       error = true
-     }
-  }
-  return error
-
-}*/
 const saveAttachments = async (urlAttachments: any, product: any, doc: any) => {
   let attachments = await Attachment.insertMany(urlAttachments)
   let attachmentId = _.map(attachments, '_id')
