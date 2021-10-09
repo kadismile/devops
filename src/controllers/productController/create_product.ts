@@ -9,26 +9,77 @@ import * as fs from "fs";
 import User from "../../models/User";
 import randomstring from "randomstring";
 import moment from "moment";
+import Category from "../../models/Category";
 
 export const addProductSchema = Joi.object().keys({
   /*name: Joi.string().required(),
   description: Joi.string().required(),
-  categoryId: Joi.string().required(),
+  productVariantId: Joi.string().required(),
+  price: Joi.number().required(),
+  user: Joi.string().required(),
+  vendor: Joi.string().required(),
   category: Joi.string().required(),
-  productImage: Joi.string().required(),*/
+  condition: Joi.string().required(),
+  specifications: Joi.array().required()*/
 });
 
 const create_product: RequestHandler = async (req: Request<{}, {}>, res) => {
   try {
     let doc: any = {
-        name: "iPhone",
-        description: "a good phone with good quality",
-        categoryId: "qs6Falw8lhPbyMDFGWMQndUnb",
-        category: "smart phones",
-        userId: "WhMDpxEosk4taTkZEyRO36m0A"
+      "name": "Iphone X",
+      "description": "With new features and capabilities that let you get more done quickly and easily, iOS 11 makes iPhone more powerful, personal, and intelligent than ever.",
+      "productVariantId": "mk2Hl9OGX8KTwSzgFiUHmoN17",
+      "price": 175000,
+      "user": "VjISjP94nL2q3zH7dNx1xBEry",
+      "vendor": "7DyHM38pvnHFrHKakZdd6n2X1",
+      "category": "MxbVegCaHNmKgtPuqKvs7gh63",
+      "specifications" : [{
+        "MPN": "A123456",
+        "Colour": "black",
+        "Unlocked": "true",
+        "Sim card format": "nano sim",
+        "Storage": "125GB",
+        "Memory": "4GB",
+        "Model": "X series",
+        "eSim": "sim",
+        "Processor brand": "intel",
+        "Processor core": "intel",
+        "Megapixels": "220pixels",
+        "OS": "ios",
+        "Resolution": "1245 * 1245",
+        "Screen type": "LED",
+        "Network": "4g",
+        "Release year": "2017",
+        "Double sim": "false",
+        "Memory card slot": "false",
+        "Screen size": "1245",
+        "Connector": "small",
+        "Manufacturing reference number": "A12345",
+        "Foldable": "false",
+        "5G": "false",
+        "Series": "10 series",
+        "Brand" : "iphone x",
+        "Price": 175000,
+        "Battery health": "80*",
+        "Warranty": "4 months",
+        "Condition": "sparingly used"
+      }],
+      "condition": "Open-box"
       }
-    await Attachment.deleteMany({})
-    await Product.deleteMany({})
+
+    //const category = await Category.findById(doc.category).select({ specifications: 1 })
+    const category = await Category.findById(doc.category)
+      .select({ specifications: 1, _id: 0 })
+      .populate("specifications", { name: 1, _id: 0})
+
+
+
+    return res.status(200).json({
+      data: category
+    });
+
+    let validSpecification = await validateSpecification(doc)
+
     let files: any = req.files;
     if (!files || files.length === 0) {
       res.status(403).json({
@@ -69,6 +120,59 @@ const uploadAttachments = async (files: any, doc: any) => {
   if (urls.length > 0)
     return urls
 }
+
+/*const validateSpecification = async (doc: any) => {
+  let c = {"specifications" : [{
+    "MPN": "A123456",
+    "Colour": "black",
+    "Unlocked": "true",
+    "Sim card format": "nano sim",
+    "Storage": "125GB",
+    "Memory": "4GB",
+    "Model": "X series",
+    "eSim": "sim",
+    "Processor brand": "intel",
+    "Processor core": "intel",
+    "Megapixels": "220pixels",
+    "OS": "ios",
+    "Resolution": "1245 * 1245",
+    "Screen type": "LED",
+    "Network": "4g",
+    "Release year": "2017",
+    "Double sim": "false",
+    "Memory card slot": "false",
+    "Screen size": "1245",
+    "Connector": "small",
+    "Manufacturing reference number": "A12345",
+    "Foldable": "false",
+    "5G": "false",
+    "Series": "10 series",
+    "Brand" : "iphone x",
+    "Price": 175000,
+    "Battery health": "80*",
+    "Warranty": "4 months",
+    "Condition": "sparingly used"
+  }]}
+  let category: any = await Category.findById(doc.category)
+    .select({ specifications: 1, _id: 0 })
+    .populate("specifications", { name: 1, _id: 0})
+  let specifications = doc.specifications
+
+  let categoryName: any = Object.values(category)
+  let specificationNames: any = Object.keys(specifications)
+  let specificationValues: any = Object.values(specifications)
+
+  let error = false
+  for (let i = 0; i < specificationValues.length; i++) {
+     if (categoryName.includes(specificationNames[i]) ) {
+       error = false
+     } else if( specificationValues[i].length === 0) {
+       error = true
+     }
+  }
+  return error
+
+}*/
 const saveAttachments = async (urlAttachments: any, product: any, doc: any) => {
   let attachments = await Attachment.insertMany(urlAttachments)
   let attachmentId = _.map(attachments, '_id')

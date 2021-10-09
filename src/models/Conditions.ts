@@ -9,10 +9,6 @@ const schema = new Schema<IProduct>({
     unique: true,
     required: [true, 'name is required']
   },
-  categories: [{
-    type: String,
-    ref: 'Category'
-  }],
   isActive: {
     type: Boolean,
     default: function() {

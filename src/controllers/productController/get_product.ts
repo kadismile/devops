@@ -3,16 +3,20 @@ import Product from "../../models/Product";
 import Joi from "@hapi/joi";
 import requestMiddleware from "@middleware/request-middleware";
 
-export const gerProductSchema = Joi.object().keys({
-  productId: Joi.string().required(),
+export const productSchema = Joi.object().keys({
+  vendorId: Joi.string().required(),
+  user: Joi.object().required(),
 });
 
 const get_product: RequestHandler = async (req: Request, res) => {
-  let doc = req.body
-  let product = await  Product.findById(doc.productId).populate("attachments")
-  return res.status(200).send({
+  let doc:any = req.query
+  let product = await  Product.find({ vendor: doc.vendorId })
+    .populate("attachments",{ url: 1, _id: 0 })
+
+  res.status(200).send({
     status: "success",
     data: product
   });
 };
-export default requestMiddleware(get_product, { validation: { body: gerProductSchema } });
+// @ts-ignore
+export default requestMiddleware(get_product, { validation: { query: productSchema } });

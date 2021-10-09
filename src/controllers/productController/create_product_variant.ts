@@ -5,16 +5,17 @@ import ProductVariant from '../../models/ProductVariant';
 
 export const addProductSchema = Joi.object().keys({
   name: Joi.string().required(),
+  categoryId: Joi.string().required(),
 });
 
-const create_product_type: RequestHandler = async (req: Request<{}, {}>, res) => {
+const create_product_variant: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
   try {
-    const pType = new ProductVariant(req.body);
-    await pType.save();
+    const productVariant = new ProductVariant(doc);
+    await productVariant.save();
     res.status(403).json({
       status: "success",
-      data: pType
+      data: productVariant
     });
   } catch (e: any) {
     res.status(403).json({
@@ -24,4 +25,4 @@ const create_product_type: RequestHandler = async (req: Request<{}, {}>, res) =>
   }
 };
 
-export default requestMiddleware(create_product_type, { validation: { body: addProductSchema } });
+export default requestMiddleware(create_product_variant, { validation: { body: addProductSchema } });
