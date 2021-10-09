@@ -14,22 +14,22 @@ const schema = new Schema<IProduct>({
   },
   productVariantId: {
     type: String,
-    ref: 'ProductVariant'
-  },
-  productType: {
-    type: String,
-    required: [true, 'Please Add product type']
+    ref: 'ProductVariant',
+    required: [true, 'Please Add productVariant Id']
   },
   price: {
     type: Number,
+    required: [true, 'Please Add a price']
   },
   user: {
     type: String,
-    ref: 'User'
+    ref: 'User',
+    required: [true, 'A User is needed']
   },
   vendor: {
     type: String,
-    ref: 'Vendor'
+    ref: 'Vendor',
+    required: [true, 'Please Add VendorId']
   },
   attachments: [{
     type: String,
@@ -42,22 +42,25 @@ const schema = new Schema<IProduct>({
     required: [true, 'kindly provide a category identifier']
   },
   specifications: {
-    type : Array,
-    default : [],
+    type: Array,
   },
-  conditions: {
-    type : Array,
-    default : [],
+  condition: {
+    type : String,
+    required: [true, 'Please Add a Condition']
   },
   specialOffer: {
-    type: Boolean
+    type: Boolean,
+    optional: true,
   },
   specialOfferPercentage: {
     type: Number,
+    optional: true,
   },
   inSale: {
     type: Boolean,
-    required: true
+    default: function() {
+      return false;
+    }
   },
   isActive: {
     type: Boolean,

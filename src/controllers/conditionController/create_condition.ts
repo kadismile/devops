@@ -2,16 +2,10 @@ import {Request, RequestHandler} from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import Condition from '../../models/Conditions';
-import Category from "../../models/Category";
-import _ from "lodash";
-import randomstring from "randomstring";
-import moment from "moment";
 
 
-export const conditionSchema = Joi.object().keys({
+export const producVariantSchema = Joi.object().keys({
   name: Joi.string(),
-  categoryId: Joi.array(),
-  conditions: Joi.array(),
   user: Joi.object().required()
 });
 
@@ -32,4 +26,4 @@ const create_condition: RequestHandler = async (req: Request<{}, {}>, res) => {
   }
 };
 
-export default requestMiddleware(create_condition, { validation: { body: conditionSchema } });
+export default requestMiddleware(create_condition, { validation: { body: producVariantSchema } });

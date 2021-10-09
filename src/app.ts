@@ -3,6 +3,7 @@ import compression from 'compression';
 import swaggerJsDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import express, { Request, Response, NextFunction } from 'express';
+import cors from "cors";
 import ApplicationError from './errors/application-error';
 // @ts-ignore
 import routerConfig from './routes/config'
@@ -10,6 +11,19 @@ import logger from './logger';
 import accessEnv from "./helpers/accessEnv";
 
 const app = express();
+app.use(
+  cors({
+    origin: (origin: any, cb: (arg0: null, arg1: boolean) => any) => cb(null, true),
+    credentials: true,
+    preflightContinue: true,
+    exposedHeaders: [
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Origin, Origin, X-Requested-With, Content-Type, Accept",
+      "X-Password-Expired"
+    ],
+    optionsSuccessStatus: 200
+  })
+)
 
 function logResponseTime(req: Request, res: Response, next: NextFunction) {
   const startHrTime = process.hrtime();

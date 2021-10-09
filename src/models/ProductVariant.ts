@@ -9,13 +9,17 @@ const schema = new Schema<IProduct>({
     unique: true,
     required: [true, 'name is required']
   },
-  isActive: {
-    type: Boolean
+  categoryId: {
+    type: String,
+    ref: 'Category',
+    required: [true, 'kindly provide a category identifier']
   },
-  inSale: {
+  isActive: {
     type: Boolean,
-    required: true
-  }
+    default: function() {
+      return true;
+    }
+  },
 },{versionKey: false});
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
