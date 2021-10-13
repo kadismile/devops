@@ -19,6 +19,7 @@ export const addProductSchema = Joi.object().keys({
   user: Joi.string().required(),
   vendor: Joi.string().required(),
   category: Joi.string().required(),
+  productBrand: Joi.string().required(),
   condition: Joi.string().required(),
   specifications: Joi.array().required()*/
 });
@@ -33,6 +34,7 @@ const create_product: RequestHandler = async (req: Request<{}, {}>, res) => {
       "user": "VjISjP94nL2q3zH7dNx1xBEry",
       "vendor": "7DyHM38pvnHFrHKakZdd6n2X1",
       "category": "MxbVegCaHNmKgtPuqKvs7gh63",
+      "productBrand": "MxbVegCaHNmKgtPuqKvs7gh63",
       "specifications" : [{
         "MPN": "A123456",
         "Colour": "black",

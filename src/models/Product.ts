@@ -1,6 +1,6 @@
 import { Model, Schema, model } from 'mongoose';
 import TimeStampPlugin from './plugins/timestamp-plugin';
-import {IProduct, IUser} from "../types";
+import {IProduct} from "../types";
 
 interface IProductModel extends Model<IProduct> { }
 const schema = new Schema<IProduct>({
@@ -40,6 +40,11 @@ const schema = new Schema<IProduct>({
     type: String,
     ref: 'Category',
     required: [true, 'kindly provide a category identifier']
+  },
+  productBrand: {
+    type: String,
+    ref: 'ProductBrand',
+    required: [true, 'kindly provide a product brand id']
   },
   specifications: {
     type: Array,
