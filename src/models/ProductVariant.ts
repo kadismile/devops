@@ -14,6 +14,16 @@ const schema = new Schema<IProduct>({
     ref: 'Category',
     required: [true, 'kindly provide a category identifier']
   },
+  productId: {
+    type: String,
+    ref: 'Product',
+    required: false
+  },
+  specifications: [{
+    type: String,
+    ref: 'Specification',
+    required: false,
+  }],
   isActive: {
     type: Boolean,
     default: function() {

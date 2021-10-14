@@ -9,9 +9,9 @@ const schema = new Schema<IProduct>({
     unique: true,
     required: [true, 'name is required']
   },
-  Category: {
+  productVariantId: {
     type: String,
-    ref: 'Category'
+    ref: 'ProductVariant'
   },
   isActive: {
     type: Boolean,

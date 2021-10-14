@@ -5,14 +5,14 @@ import ProductBrand from '../../models/ProductBrand';
 
 export const productBrandSchema = Joi.object().keys({
   name: Joi.string().required(),
+  productVariantId: Joi.string().required()
 });
 
 const create_product_brand: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
   try {
-   let prodBrand = new ProductBrand({ name: doc.name });
+   let prodBrand = new ProductBrand(doc);
     await prodBrand.save()
-
     res.status(201).json({
       status: "success",
       data: prodBrand
