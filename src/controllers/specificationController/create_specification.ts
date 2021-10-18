@@ -6,11 +6,12 @@ import Category from "../../models/Category";
 import _ from "lodash";
 import randomstring from "randomstring";
 import moment from "moment";
+import ProductVariant from "../../models/ProductVariant";
 
 
 export const addSpecificationSchema = Joi.object().keys({
   name: Joi.string(),
-  categoryId: Joi.array(),
+  productVariantId: Joi.array(),
   specifications: Joi.array(),
   user: Joi.object().required()
 });
@@ -21,7 +22,7 @@ const create_specification: RequestHandler = async (req: Request<{}, {}>, res) =
     let multiSpecifications
     let updatedDoc
     if (doc.specifications?.length > 0 ) {
-      let categoryId = doc.categoryId[0]
+      console.log("heloooooo-> ", doc.specifications)
       multiSpecifications = await createMultipleSpecifications(doc)
     } else {
       let  specification = new Specification(doc)
@@ -58,11 +59,11 @@ const createMultipleSpecifications = async (docs: any) => {
 
   await Specification.updateMany(
     { _id: { $in: specificationIds } },
-    { $set: { categories: docs.categoryId[0] } },
+    { $set: { productVariants: docs.productVariantId[0] } },
     {multi: true}
   )
 
-  await Category.findByIdAndUpdate(docs.categoryId[0],
+  await ProductVariant.findByIdAndUpdate(docs.productVariantId[0],
     { $push: { specifications: specificationIds } },
     { new: true, useFindAndModify: false }
   )

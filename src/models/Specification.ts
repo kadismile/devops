@@ -9,9 +9,9 @@ const schema = new Schema<IProduct>({
     unique: true,
     required: [true, 'name is required']
   },
-  categories: [{
+  productVariants: [{
     type: String,
-    ref: 'Category'
+    ref: 'ProductVariant'
   }],
   isActive: {
     type: Boolean,
@@ -24,7 +24,6 @@ const schema = new Schema<IProduct>({
 schema.plugin(TimeStampPlugin);
 
 schema.pre('remove', function (next) {
-  console.log("===================> REMOVED",)
   let specification = this;
   specification.model('Category').update(
     { specifications: specification._id },

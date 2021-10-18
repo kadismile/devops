@@ -2,6 +2,7 @@ import { Request, RequestHandler } from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
+import Vendor from '../../models/Vendor';
 import ApplicationError from '../../errors/application-error';
 
 export const LoginSchema = Joi.object().keys({
@@ -40,10 +41,12 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
         });
       } else {
         const token = user.getSignedJwtToken();
+        const vendor = await Vendor.findOne({user: user._id})
         res.status(200).json({
           status: "success",
           token,
-          user: await User.findOne({ _id: user._id })
+          user: await User.findOne({ _id: user._id }),
+          vendor: vendor ? vendor : undefined
         });
       }
     } catch (e: any) {
