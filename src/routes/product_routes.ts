@@ -7,7 +7,7 @@ const vendor_routes = Router();
 
 vendor_routes.post('/create', protect, multerUpload, productController.create_product);
 vendor_routes.post('/brand/create', productController.create_product_brand);
-vendor_routes.get('/get', protect, productController.get_product);
+vendor_routes.get('/get', productController.get_product);
 
 
 export default vendor_routes;
