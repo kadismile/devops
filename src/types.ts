@@ -44,3 +44,17 @@ export interface IProduct extends ITimeStampedDocument {
   productImage: string
   uploadedAt: string
 }
+
+export interface IOrder extends ITimeStampedDocument {
+  globalOrderNumber: string,
+  userId: string,
+  subTotal: number,
+  shippingAddress: string,
+  items: [string],
+  vendorId: string,
+  category: string,
+  productBrand: string,
+  name: string,
+  price: number,
+  attachments: [string]
+}
