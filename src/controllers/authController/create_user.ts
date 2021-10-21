@@ -55,5 +55,4 @@ const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
     }
 };
 
-
 export default requestMiddleware(create_user, { validation: { body: addUserSchema } });

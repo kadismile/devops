@@ -1,5 +1,4 @@
 import { Model, Schema, model } from 'mongoose';
-import mongoose from 'mongoose'
 import TimeStampPlugin from './plugins/timestamp-plugin';
 import  UserAfterUpdate   from './hooks/user_after_update'
 import  UserBeforeSave   from './hooks/user_before_save'
@@ -35,7 +34,7 @@ const schema = new Schema<IUser>({
   },
   userType: {
     type: String,
-    required: [true, "kindly provide a usertype"]
+    required: [true, "kindly provide a userType"]
   },
   vendor: {
     type: String,

@@ -9,6 +9,10 @@ const schema = new Schema<IOrder>({
     type: String,
     required: [true, 'Please Add vendorId']
   },
+  userId: {
+    type: String,
+    required: [true, 'Please Add vendorId']
+  },
   productId: {
     type: String,
     required: [true, 'Please Add productId']
@@ -21,21 +25,13 @@ const schema = new Schema<IOrder>({
     type: String,
     required: [true, 'Please Add productBrand']
   },
-  name: {
-    type: String,
-    required: [true, 'Please Add product name']
-  },
   price: {
     type: Number,
     required: [true, 'Please Add a price']
   },
-  description: {
-    type: String,
-    required: [true, 'Please Add a price']
-  },
   attachments: [{
     type : Array,
-    default : [],
+    required: [true, 'Please Add image url']
   }],
 },{versionKey: false});
 

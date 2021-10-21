@@ -18,7 +18,8 @@ export interface IUser extends ITimeStampedDocument {
   history: [object],
   superAdmin: boolean,
   isActive: boolean,
-  isVerified: boolean
+  isVerified: boolean,
+  countryCode: string
 }
 
 export interface IVendor extends ITimeStampedDocument {
@@ -50,7 +51,7 @@ export interface IOrder extends ITimeStampedDocument {
   userId: string,
   subTotal: number,
   shippingAddress: string,
-  items: [string],
+  orderItems: [string],
   vendorId: string,
   category: string,
   productBrand: string,

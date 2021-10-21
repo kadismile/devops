@@ -22,7 +22,6 @@ const create_specification: RequestHandler = async (req: Request<{}, {}>, res) =
     let multiSpecifications
     let updatedDoc
     if (doc.specifications?.length > 0 ) {
-      console.log("heloooooo-> ", doc.specifications)
       multiSpecifications = await createMultipleSpecifications(doc)
     } else {
       let  specification = new Specification(doc)

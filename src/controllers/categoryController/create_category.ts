@@ -10,7 +10,6 @@ export const addCategorySchema = Joi.object().keys({
 
 const create_category: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body
-  let token: any = req.headers.authorization
   try {
    let category = new Category({ name: doc.name });
     await category.save()
