@@ -1,12 +1,13 @@
 import { Model, Schema, model } from 'mongoose';
 import TimeStampPlugin from './plugins/timestamp-plugin';
 import {IOrder} from "../types";
+import OrderBeforeSave from "./hooks/order_before_save";
 
 interface IOrderModel extends Model<IOrder> { }
 const schema = new Schema<IOrder>({
   globalOrderNumber: {
     type: String,
-    required: [true, 'Please Add globalOrderNumber']
+    required: false
   },
   userId: {
     type: String,
@@ -15,17 +16,16 @@ const schema = new Schema<IOrder>({
   },
   subTotal: {
     type: Number,
-    required: [true, 'Please Add a price']
+    required: false
   },
   shippingAddress: {
     type : Object,
     required: [true, 'Please add an address']
   },
-  items: [{
-    type: String,
-    ref: 'OrderItems',
+  orderItems: {
+    type: Array,
     required: [true, 'Please Add items']
-  }],
+  },
   isActive: {
     type: Boolean,
     default: function() {
@@ -34,8 +34,12 @@ const schema = new Schema<IOrder>({
   },
 },{versionKey: false});
 
-// Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
+// Add timestamp plugin for createdAt and updatedAt in milliseconds from epoch
 schema.plugin(TimeStampPlugin);
+
+schema.pre("save", async function(this, next) {
+  await OrderBeforeSave(this)
+});
 
 const Order: IOrderModel = model<IOrder, IOrderModel>('Order', schema);
 

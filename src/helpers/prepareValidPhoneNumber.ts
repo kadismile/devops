@@ -14,7 +14,8 @@ const prepareValidPhoneNumber = (doc: IUser) =>{
 
 const preparePhoneNumber = (doc: IUser) => {
   const phoneUtil = PhoneNumberUtil;
-  const phone = phoneUtil.parse(doc.phoneNumber, doc.address.countryCode);
+  const countryCode = doc.address?.countryCode || doc.countryCode
+  const phone = phoneUtil.parse(doc.phoneNumber, countryCode);
   if (phoneUtil.isValidNumber(phone)) {
     return phoneUtil.format(phone, PNF.E164)
   } else {
@@ -24,7 +25,8 @@ const preparePhoneNumber = (doc: IUser) => {
 
 const isValidPhoneNumber = (doc: IUser) => {
   const phoneUtil = PhoneNumberUtil;
-  const phone = phoneUtil.parse(doc.phoneNumber, doc.address.countryCode);
+  const countryCode = doc.address?.countryCode || doc.countryCode
+  const phone = phoneUtil.parse(doc.phoneNumber, countryCode);
   return phoneUtil.isValidNumber(phone);
 }
 
