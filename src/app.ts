@@ -48,13 +48,17 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Documentation
 const swaggerOptions: any = {
   swaggerDefinition: {
     info: {
       title: "Next-handle API Docs",
       description: "APi documentation for next handle",
+      version: "1.0.0",
       contact: {
-        name: "Kadismile"
+        name: "Next-handle",
+        email: "info@next-handle@.com",
+        url: "www.next-handle.com",
       },
       servers: [accessEnv("DOMAIN_URL")]
     }
@@ -70,6 +74,11 @@ routerConfig.forEach((rou: any[]) => {
   let router = rou[1]
   app.use(route, router)
 })
+
+/* console.log("ppopppppkkkkkkkkkkk", accessEnv("REDIS_URL", ""))
+process.on('uncaughtException', function (err) {
+  console.log("====================> ", err);
+});  */
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
