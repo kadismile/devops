@@ -92,3 +92,27 @@
  *       200:
  *         description:
  */
+
+/**
+ * @swagger
+ * resourcePath: /api
+ * /api/v1/users/update:
+ *   post:
+ *     description: Api to Login A user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email
+ *         description: User's email.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: fullName
+ *         description: User's FullName.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description:
+ */

@@ -75,10 +75,10 @@ routerConfig.forEach((rou: any[]) => {
   app.use(route, router)
 })
 
-/* console.log("ppopppppkkkkkkkkkkk", accessEnv("REDIS_URL", ""))
+
 process.on('uncaughtException', function (err) {
   console.log("====================> ", err);
-});  */
+});  
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
