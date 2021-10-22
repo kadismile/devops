@@ -27,9 +27,9 @@ class Mailer {
   });
 
   private queue = kue.createQueue(
-    {
-      redis: 'redis://:p2d6128557ad6475d4fe94217ecb4ebeabe73aed38edea389edc5a42174a53825@ec2-44-196-100-58.compute-1.amazonaws.com:30789'
-    }
+    /* {
+      redis: accessEnv("REDIS_URL", "")
+    } */
   );
 
 

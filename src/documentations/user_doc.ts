@@ -78,8 +78,8 @@
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: email | phone
- *         description: User's email or phone number.
+ *       - name: email
+ *         description: User's email.
  *         in: formData
  *         required: true
  *         type: string
