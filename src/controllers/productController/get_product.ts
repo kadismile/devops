@@ -10,7 +10,7 @@ export const productSchema = Joi.object().keys({
 
 const get_product: RequestHandler = async (req: Request, res) => {
   let doc:any = req.query
-  let product = await  Product.find({ vendor: doc.vendorId })
+  let product = await  Product.find({})
     .populate("attachments",{ url: 1, _id: 0 })
 
   res.status(200).send({

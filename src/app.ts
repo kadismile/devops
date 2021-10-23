@@ -2,6 +2,8 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import swaggerJsDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import YAML from 'yamljs'
+const swaggerDocument = YAML.load('./src/documentations/user_doc.yaml');
 import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 import ApplicationError from './errors/application-error';
@@ -49,7 +51,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Documentation
-const swaggerOptions: any = {
+
+/* const swaggerOptions: any = {
   swaggerDefinition: {
     info: {
       title: "Next-handle API Docs",
@@ -66,7 +69,9 @@ const swaggerOptions: any = {
   apis: ["./src/documentations/*.ts"]
 }
 const swaggerDocs = swaggerJsDoc(swaggerOptions)
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs)) */
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //Routes
 routerConfig.forEach((rou: any[]) => {
@@ -77,7 +82,7 @@ routerConfig.forEach((rou: any[]) => {
 
 
 process.on('uncaughtException', function (err) {
-  console.log("====================> ", err);
+  console.log("====================>");
 });  
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
