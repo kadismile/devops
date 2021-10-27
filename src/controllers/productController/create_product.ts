@@ -12,7 +12,7 @@ import moment from "moment";
 import Category from "../../models/Category";
 
 export const addProductSchema = Joi.object().keys({
-  /*name: Joi.string().required(),
+  name: Joi.string().required(),
   description: Joi.string().required(),
   productVariantId: Joi.string().required(),
   price: Joi.number().required(),
@@ -21,12 +21,12 @@ export const addProductSchema = Joi.object().keys({
   category: Joi.string().required(),
   productBrand: Joi.string().required(),
   condition: Joi.string().required(),
-  specifications: Joi.array().required()*/
+  specifications: Joi.array().required()
 });
 
 const create_product: RequestHandler = async (req: Request<{}, {}>, res) => {
   try {
-    let doc: any = {
+    /* let doc: any = {
       "name": "Iphone X",
       "description": "With new features and capabilities that let you get more done quickly and easily, iOS 11 makes iPhone more powerful, personal, and intelligent than ever.",
       "productVariantId": "mk2Hl9OGX8KTwSzgFiUHmoN17",
@@ -41,9 +41,11 @@ const create_product: RequestHandler = async (req: Request<{}, {}>, res) => {
         "Release year": "2017",
       }],
       "condition": "Open-box"
-      }
+      } */
 
-    const category = await Category.findById(doc.category)
+      let doc = req.body
+      console.log("Doc ---------> ", doc)
+      const category = await Category.findById(doc.category)
       .select({ specifications: 1, _id: 0 })
       .populate("specifications", { name: 1, _id: 0})
     let files: any = req.files;
