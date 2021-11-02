@@ -1,6 +1,4 @@
 import { string } from 'joi';
-import { user_doc } from './user-docs'
-import { vendor_doc } from './vendor-docs'
 
 let envVariable = process.env.DOMAIN_URL || ''
 let domainUrl: string[] = envVariable.split('//');
@@ -15,7 +13,6 @@ export const api_docs = {
   host:`${domainUrl[1]}`,
   basePath: "/api/v1",
   schemes: [
-    "http",
     "https"
   ],
   consumes: [

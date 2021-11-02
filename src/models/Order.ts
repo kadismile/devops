@@ -26,6 +26,12 @@ const schema = new Schema<IOrder>({
     type: Array,
     required: [true, 'Please Add items']
   },
+  status: {
+    type: String
+  },
+  shippingStatus: {
+    type: String
+  },
   isActive: {
     type: Boolean,
     default: function() {
