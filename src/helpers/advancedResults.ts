@@ -1,107 +1,108 @@
 import _ from 'lodash';
+import moment from 'moment';
 import ApplicationError from '../errors/application-error';
-export const advancedResults = async (req: any, model: any, populate: any)  => {
-
+export const advancedResults = async (req: any, model: any, populate: any) => {
   try {
-    let query;
-  let queryStr
-  const reqQuery = { ...req.query };
-  
-  const removeFields = ['select', 'sort', 'limit'];
-  removeFields.forEach(param => delete reqQuery[param]);
+    let query, queryStr;
+    const reqQuery = { ...req.query };
 
-  if (reqQuery.field?.length) {
-    let { gt, gte, lt, lte} = reqQuery
-    if (!gt && !gte && !lt && !lte && !reqQuery.in) {
-      throw new ApplicationError("kindly add a gt, gte, lt, lte in your query params")
-    }
-    let key = reqQuery.field
-    let iin = reqQuery?.in
-    delete reqQuery.field
-    delete reqQuery?.page
-    delete reqQuery?.in
+    const removeFields = ['select', 'sort', 'limit'];
+    removeFields.forEach((param) => delete reqQuery[param]);
 
-    if (key === 'createdAt' || key === 'updatedAt') {
-      for (const i in reqQuery) {
-        reqQuery[i] = new Date(reqQuery[i]).toISOString()
+    if (reqQuery.field?.length) {
+      let { gt, gte, lt, lte } = reqQuery;
+      if (!gt && !gte && !lt && !lte && !reqQuery.in) {
+        throw new ApplicationError('kindly add a gt, gte, lt, lte in your query params');
       }
-    }
-    if (iin) {
-      try {
-        reqQuery.in = JSON.parse(iin)
-        if (!Array.isArray(reqQuery.in)) {
-          throw new ApplicationError("kindly provide a proper array in the in parameter")
+      let key = reqQuery.field;
+      let iin = reqQuery?.in;
+      delete reqQuery.field;
+      delete reqQuery?.page;
+      delete reqQuery?.in;
+
+      if (key === 'createdAt' || key === 'updatedAt') {
+        for (const i in reqQuery) {
+          //this is formatted to Year , Month and Day.
+          reqQuery[i] = moment(reqQuery[i]).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
         }
-      } catch (error) {
-        throw new ApplicationError("kindly provide a proper array in the 'in' parameter")
+      }
+
+      if (iin) {
+        try {
+          reqQuery.in = JSON.parse(iin);
+          if (!Array.isArray(reqQuery.in)) {
+            throw new ApplicationError('kindly provide a proper array in the in parameter');
+          }
+        } catch (error) {
+          throw new ApplicationError("kindly provide a proper array in the 'in' parameter");
+        }
+      }
+
+      queryStr = JSON.stringify(reqQuery);
+      queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => `$${match}`);
+
+      if (!_.isEmpty(JSON.parse(queryStr))) {
+        query = {
+          [key]: queryStr ? JSON.parse(queryStr) : 1,
+        };
       }
     }
 
-    queryStr = JSON.stringify(reqQuery);
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-  
-    if (!_.isEmpty(JSON.parse(queryStr))) {
-      query = {
-        [key] : queryStr ? JSON.parse(queryStr) : 1
+    query = model.find(query);
+
+    if (populate) {
+      query = query.populate(populate);
+    }
+
+    if (req.query.sort) {
+      if (req.query.sort === 'ASC' || req.query.sort === 'asc') {
+        query = query.sort({ createdAt: -1 });
+      }
+      if (req.query.sort === 'DESC' || req.query.sort === 'desc') {
+        query = query.sort({ createdAt: 1 });
+      }
+    }
+
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 20;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const total = await model.countDocuments();
+
+    if (req.query.skip) {
+      query = query.skip(endIndex);
+    }
+
+    if (req.query.limit) {
+      query = query.limit(limit);
+    }
+
+    const results = await query;
+
+    //pagination
+    const pagination: any = {};
+    if (endIndex < total) {
+      pagination.next = {
+        page: page + 1,
+        limit,
       };
     }
-  }
 
-  query = model.find(query)
-
-  if (populate) {
-    query = query.populate(populate)
-  }
-
-  if (req.query.sort) {
-    if (req.query.sort === 'ASC' || req.query.sort === 'asc') {
-      query = query.sort({ createdAt: -1 })
-    } 
-    if (req.query.sort === 'DESC' || req.query.sort === 'desc') {
-      query = query.sort({ createdAt: 1 })
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit,
+      };
     }
-  }
 
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 20;
-  const startIndex = (page - 1) * limit; //
-  const endIndex = page * limit;
-  const total = await model.countDocuments();
-
-  if (req.query.skip) {
-    query = query.skip(endIndex)
-  }
-
-  if (req.query.limit) {
-    query = query.limit(limit)
-  }
-
-  const results = await query;
-
-  //pagination
-  const pagination: any = {};
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit
-    }
-  }
-
-  if (startIndex > 0 ) {
-    pagination.prev = {
-      page: page -1,
-      limit
+    let advancedResults = {
+      count: results.length,
+      pagination,
+      data: results,
     };
-  }
 
-  let advancedResults = {
-    count: results.length,
-    pagination,
-    data: results
-  };
-
-  return advancedResults
+    return advancedResults;
   } catch (error: any) {
-    throw new ApplicationError(error.message)
+    throw new ApplicationError(error.message);
   }
-}
+};
