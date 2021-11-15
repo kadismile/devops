@@ -8,8 +8,6 @@ cloudinary.config({
   api_secret: accessEnv("CLOUDINARY_API_SECRET", ""),
 })
 
-
-
 export const uploads = (file:any, folder:any) => {
   return new Promise( (resolve) => {
       cloudinary.uploader.upload(file, (result: any) => {
@@ -20,6 +18,14 @@ export const uploads = (file:any, folder:any) => {
       }, {
         resource_type: "auto",
         folder: folder
+      })
+  })
+}
+
+export const removeImage = (file:any, folder:any) => {
+  return new Promise( (resolve) => {
+      cloudinary.uploader.destroy(file, (result: any) => {
+        return resolve(result)
       })
   })
 }
