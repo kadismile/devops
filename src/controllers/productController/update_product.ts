@@ -14,6 +14,7 @@ export const productSchema = Joi.object().keys({
   productBrand: Joi.string(),
   condition: Joi.string(),
   specifications: Joi.array(),
+  attachment: Joi.array(),
   user: Joi.object().required(),
 });
 
@@ -26,6 +27,10 @@ const update_product: RequestHandler = async (req: Request, res) => {
       runValidators: true,
       useFindAndModify: false
     });
+
+    if (doc.attachments.length) {
+      
+    }
 
     res.status(200).json({
       status: 'success',

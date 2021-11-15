@@ -4,13 +4,9 @@ import {IProduct, IUser} from "../types";
 
 interface IAttachmentModel extends Model<IProduct> { }
 const schema = new Schema<IProduct>({
-  user: {
+  uploadedBy: {
     type: String,
     ref: 'User'
-  },
-  product: {
-    type: String,
-    ref: 'Product'
   },
   url: {
     type: String,
