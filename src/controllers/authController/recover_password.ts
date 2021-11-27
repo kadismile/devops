@@ -2,7 +2,6 @@ import requestMiddleware from '../../middleware/request-middleware';
 import User from '../../models/User';
 import  Mailer from '../../helpers/mailer'
 import accessEnv from '../../helpers/accessEnv';
-import ApplicationError from '../../errors/application-error';
 import Joi from "@hapi/joi";
 import {Request, RequestHandler} from "express";
 import {compare, hash} from "bcryptjs";
