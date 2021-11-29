@@ -96,7 +96,11 @@ const schema = new Schema<IUser>({
   attachments: [{
     type: String,
     ref: 'Attachment'
-  }]
+  }],
+  loginToken: {
+    type: String,
+    optional: true,
+  }
 },{versionKey: false});
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
