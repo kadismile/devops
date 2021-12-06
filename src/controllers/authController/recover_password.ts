@@ -4,7 +4,6 @@ import  Mailer from '../../helpers/mailer'
 import accessEnv from '../../helpers/accessEnv';
 import Joi from "@hapi/joi";
 import {Request, RequestHandler} from "express";
-import {compare, hash} from "bcryptjs";
 import kue from "kue";
 
 export const RecoverPasswordSchema = Joi.object().keys({
@@ -47,35 +46,6 @@ const recoverPassword: RequestHandler = async (req: Request<{}, {}>, res) => {
     res.status(401).json({
       status: "failed",
       message: "No user found With That Email"
-    });
-  }
-};
-
-const changePassword: RequestHandler = async (req: Request<{}, {}>, res) => {
-  let { oldPassword, newPassword, resetPasswordToken } = req.body;
-  const user: any =  await User.findOne({ resetPasswordToken: resetPasswordToken })
-  if (user) {
-    const verify = await compare(oldPassword, user.password);
-    if (!verify) {
-      res.status(403).json({
-        message: "Wrong Current Password Provided"
-      });
-    } else {
-      newPassword = await hash(newPassword, 13)
-      await User.findByIdAndUpdate(user._id, {
-       resetPasswordToken: "null", password: newPassword }, {
-        new: true,
-        runValidators: true,
-        useFindAndModify: false
-      });
-      res.status(200).json({
-        message: "Password Recovered Successfully"
-      });
-    }
-
-  } else {
-    res.status(401).json({
-      message: "No user found"
     });
   }
 };

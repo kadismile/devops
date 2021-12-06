@@ -9,12 +9,12 @@ import Mailer from "../../helpers/mailer";
 export const LoginSchema = Joi.object().keys({
   password: Joi.string().required(),
   phoneNumber: Joi.string(),
+  isAdmin: Joi.boolean(),
   email: Joi.string().email({ tlds: { allow: false } }),
 });
 
 const login: RequestHandler = async (req: Request<{}, {}>, res) => {
-  let { email, phoneNumber, password } = req.body;
-
+  let { email, phoneNumber, password, isAdmin } = req.body;
   if (!email && !phoneNumber) {
     res.status(403).json({
       status: "failed",
@@ -32,6 +32,11 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
           { phoneNumber: { $in: phoneNumber} } ] })
           .select('+password');
       if (!user) {
+        res.status(401).json({
+          data: "Invalid credentials"
+        });
+      }
+      if (isAdmin && !user.isAdmin && user.isAdmin === false) {
         res.status(401).json({
           data: "Invalid credentials"
         });
@@ -69,9 +74,10 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
           });
         } else {
           res.status(200).json({
+            persistent: true,
             status: "success",
             email: user.email,
-            message: "Login token has already been sent to your registerd email address"
+            message: "Login token has already been sent to your registered email address"
           });
         }
       }
