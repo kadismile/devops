@@ -5,6 +5,7 @@ import User from '../../models/User';
 import ApplicationError from '../../errors/application-error';
 import kue from "kue";
 import Mailer from "../../helpers/mailer";
+import Vendor from "../../models/Vendor";
 
 export const LoginSchema = Joi.object().keys({
   password: Joi.string().required(),
@@ -48,9 +49,13 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
           data: "Invalid credentials"
         });
       } else {
+        const token = user.getSignedJwtToken();
+        const vendor = await Vendor.findOne({user: user._id});
         res.status(200).json({
           status: "success",
-          user
+          token,
+          user: await User.findOne({ _id: user._id }),
+          vendor: vendor ? vendor : undefined
         });
         /*if (!user.loginToken) {
           const loginToken = Math.floor(1000 + Math.random() * 900000);
