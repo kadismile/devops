@@ -1,5 +1,5 @@
 import { Request, RequestHandler } from 'express';
-import Product from "../../models/Product";
+import Vendor from "../../models/Vendor";
 import Joi from "@hapi/joi";
 import { advancedResults } from '../../helpers/advancedResults'
 import requestMiddleware from "@middleware/request-middleware";
@@ -10,11 +10,11 @@ export const productSchema = Joi.object().keys({
 });
 
 const get_product: RequestHandler = async (req: Request, res) => {
-  let product: any = await advancedResults(req, Product, "vendor")
-  if (product?.data) {
+  let vendors: any = await advancedResults(req, Vendor, undefined);
+  if (vendors?.data) {
     res.status(200).json({
       status: "success",
-      data: product
+      data: vendors
     });
   }
 };
