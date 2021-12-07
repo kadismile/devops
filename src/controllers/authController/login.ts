@@ -43,7 +43,11 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
           data: "Invalid credentials"
         });
       } else {
-        if (!user.loginToken) {
+        res.status(200).json({
+          status: "success",
+          user
+        });
+        /*if (!user.loginToken) {
           const loginToken = Math.floor(1000 + Math.random() * 900000);
           await User.findByIdAndUpdate(user._id, {loginToken}, {
             new: true,
@@ -73,7 +77,7 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
             email: user.email,
             message: "Login token has already been sent to your registerd email address"
           });
-        }
+        }*/
       }
     } catch (e: any) {
       throw new ApplicationError(e.message, 500)
