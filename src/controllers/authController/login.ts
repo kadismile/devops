@@ -17,7 +17,7 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
   let { email, phoneNumber, password } = req.body;
 
   if (!email && !phoneNumber) {
-    res.status(403).json({
+    res.status(400).json({
       status: "failed",
       error: "Please Login with  your phone-number or email"
     });

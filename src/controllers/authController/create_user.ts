@@ -48,7 +48,7 @@ const create_user: RequestHandler = async (req: Request<{}, {}>, res) => {
         data: loggedInUser
       });
     } catch (e: any) {
-      res.status(403).json({
+      res.status(400).json({
         status: "failed",
         message: e.message
       });
