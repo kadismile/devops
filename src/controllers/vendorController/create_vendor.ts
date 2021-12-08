@@ -29,8 +29,9 @@ const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
         message: newUser.message
       });
     }
-    if (newUser.email) {
-      newUser = await User.findOne({ email: newUser.email });
+    if (newUser.user.email) {
+      const {user} = newUser;
+      newUser = await User.findOne({ email: user.email });
       req.body.phoneNumber = newUser.phoneNumber;
       req.body.user = newUser._id;
       const vendor = new Vendor(req.body);

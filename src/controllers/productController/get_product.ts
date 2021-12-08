@@ -10,7 +10,7 @@ export const productSchema = Joi.object().keys({
 });
 
 const get_product: RequestHandler = async (req: Request, res) => {
-  let product: any = await advancedResults(req, Product, "attachments")
+  let product: any = await advancedResults(req, Product, ["attachments", "category", "vendor", "user"])
   if (product?.data) {
     res.status(200).json({
       status: "success",
