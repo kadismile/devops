@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import ApplicationError from '../errors/application-error';
+import unregisterDecorator = Handlebars.unregisterDecorator;
 export const advancedResults = async (req: any, model: any, populate: any) => {
   try {
     let query, queryStr;
@@ -51,7 +52,9 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     query = model.find(query);
 
     if (populate) {
-      query = query.populate(populate);
+      for (const i of populate) {
+        await query.populate(i, getPopulatedOptions(i));
+      }
     }
 
     if (req.query.sort) {
@@ -104,5 +107,18 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     return advancedResults;
   } catch (error: any) {
     throw new ApplicationError(error.message);
+  }
+};
+
+const getPopulatedOptions = (population: string) => {
+  switch (population) {
+    case population = 'category':
+      return 'name';
+    case population = 'vendor':
+      return 'businessName';
+    case population = 'user':
+      return 'fullName';
+    case population = 'attachments':
+      return 'url';
   }
 };
