@@ -16,6 +16,9 @@ export const addUserSchema = Joi.object().keys({
   address: Joi.object({
     country: Joi.string().required(),
     fullAddress: Joi.string().required(),
+    landMark: Joi.string(),
+    city: Joi.string(),
+    state: Joi.string(),
     countryCode: Joi.string().required(),
     longitude: Joi.string().required(),
     latitude: Joi.string().required(),

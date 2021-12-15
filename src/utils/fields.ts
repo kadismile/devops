@@ -1,7 +1,7 @@
 const fields : any  =  {
   "productvariants": ["name"],
   "productbrands": ["name"],
-  "products": ["name", "price"],
+  "products": ["name"],
 };
 
 export default fields

@@ -7,11 +7,16 @@ import User from "../../models/User";
 
 export const addVendorSchema = Joi.object().keys({
   businessName: Joi.string().required(),
+  businessOwner: Joi.string().required(),
+  businessRegNumber: Joi.string().required(),
   password: Joi.string().required(),
   phoneNumber: Joi.string().required(),
   email: Joi.string().required().email({ tlds: { allow: false } }),
   businessAddress: Joi.object({
     country: Joi.string().required(),
+    landMark: Joi.string().required(),
+    city: Joi.string().required(),
+    state: Joi.string().required(),
     fullAddress: Joi.string().required(),
     countryCode: Joi.string().required(),
     longitude: Joi.string().required(),
@@ -23,6 +28,7 @@ const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body;
   try {
     let newUser: any = await createUser(doc);
+    console.log("newUser-newUser-newUser", newUser);
     if (newUser.status === 'failed') {
       res.status(403).json({
         status: newUser.status,
