@@ -9,6 +9,7 @@ export const vendorSchema = Joi.object().keys({
   user: Joi.object().required(),
 });
 
+
 const get_vendors: RequestHandler = async (req: Request, res) => {
   let vendors: any = await advancedResults(req, Vendor, undefined);
   if (vendors?.data) {

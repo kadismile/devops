@@ -81,6 +81,12 @@ const schema = new Schema<IUser>({
       return false;
     }
   },
+  isAdmin: {
+    type: Boolean,
+    default: function () {
+      return false;
+    }
+  },
   isActive: {
     type: Boolean,
     default: function() {
