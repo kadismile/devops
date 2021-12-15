@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
 import ApplicationError from '../errors/application-error';
-import unregisterDecorator = Handlebars.unregisterDecorator;
 export const advancedResults = async (req: any, model: any, populate: any) => {
   try {
     let query, queryStr;

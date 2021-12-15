@@ -197,11 +197,13 @@ export const api_docs = {
           schema: {
             required: [
               "email",
-              "fullName",
+              "businessName",
               "password",
               "address",
               "phoneNumber",
-              "businessAddress"
+              "businessAddress",
+              "businessRegNumber",
+              "businessOwner"
             ],
             properties: {
               email: {
@@ -210,7 +212,13 @@ export const api_docs = {
               password: {
                 type: "string"
               },
-              fullName: {
+              businessName: {
+                type: "string"
+              },
+              businessOwner: {
+                type: "string"
+              },
+              businessRegNumber: {
                 type: "string"
               },
               phoneNumber: {
@@ -220,6 +228,15 @@ export const api_docs = {
                 type: "object",
                 properties: {
                   country: {
+                    type: "string"
+                  },
+                  landMark: {
+                    type: "string"
+                  },
+                  city: {
+                    type: "string"
+                  },
+                  state: {
                     type: "string"
                   },
                   countryCode: {

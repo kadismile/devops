@@ -35,6 +35,14 @@ const schema = new Schema<IVendor>({
     type : Array,
     required: [true, 'Please add an address']
   },
+  businessOwner: {
+    type : String,
+    required: [true, 'Please add an business owner']
+  },
+  businessRegNumber: {
+    type : String,
+    required: [true, 'Please add a business reg number']
+  },
   user: {
     type: String,
     ref: 'User',
