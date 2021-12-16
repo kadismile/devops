@@ -8,6 +8,7 @@ import specification_routes from "./specification_routes";
 import condition_routes from "./condition_routes";
 import order_routes from "./order_routes";
 import search_routes from "./search_routes";
+import paystack_routes from "./paystack_routes";
 
 
 module.exports = [
@@ -20,4 +21,5 @@ module.exports = [
   ['/api/v1/condition', condition_routes],
   ['/api/v1/order', order_routes],
   ['/api/v1/search', search_routes],
+  ['/api/v1/paystack', paystack_routes],
 ]
