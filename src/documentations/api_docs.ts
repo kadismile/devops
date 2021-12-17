@@ -183,7 +183,7 @@ export const api_docs = {
     }
   },
 
-  "/vendor/create": {
+  "/vendors/create": {
     post: {
       tags: [
         "Vendors"
