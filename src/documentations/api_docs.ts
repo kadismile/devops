@@ -203,7 +203,8 @@ export const api_docs = {
               "phoneNumber",
               "businessAddress",
               "businessRegNumber",
-              "businessOwner"
+              "businessOwner",
+              "accounts"
             ],
             properties: {
               email: {
@@ -249,6 +250,17 @@ export const api_docs = {
                     type: "string"
                   },
                   latitude: {
+                    type: "string"
+                  }
+                }
+              },
+              account: {
+                type: "object",
+                properties: {
+                  bankName: {
+                    type: "string"
+                  },
+                  accountNumber: {
                     type: "string"
                   }
                 }

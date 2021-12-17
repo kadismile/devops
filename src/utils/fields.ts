@@ -1,6 +1,6 @@
 const fields : any  =  {
   "productvariants": ["name"],
-  "productbrands": ["name"],
+  "vendors": ["businessName"],
   "products": ["name"],
 };
 
