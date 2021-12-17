@@ -578,6 +578,60 @@ export const api_docs = {
     }
   },
 
+  "/paystack/banks": {
+    get: {
+      tags: [
+        "Banks"
+      ],
+      description: "List Banks In Nigeria",
+      parameters: [
+        {
+          name: "banks",
+          in: "body",
+          description: "List Banks",
+        }
+      ],
+      produces: [
+        "application/json"
+      ],
+      responses: {
+
+      }
+    }
+  },
+  "/paystack/resolve-account": {
+    get: {
+      tags: [
+        "Banks"
+      ],
+      description: "Resolve Account Number",
+      parameters: [
+        {
+          in: "query",
+          name: "account_number",
+          schema: {
+            type: "string"
+          },
+          description: "a valid 10 digit account number"
+        },
+        {
+          in: "query",
+          name: "bank_code",
+          schema: {
+            type: "string"
+          },
+          description: "the bank code of the account number"
+        }
+      ],
+      produces: [
+        "application/json"
+      ],
+      responses: {
+
+      }
+    }
+  },
+
 },
   /* definitions: {
     User: {
