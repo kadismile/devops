@@ -22,13 +22,16 @@ export const addVendorSchema = Joi.object().keys({
     longitude: Joi.string().required(),
     latitude: Joi.string().required(),
   }).required(),
+  accounts: Joi.object({
+    bankName: Joi.string().required(),
+    accountNumber: Joi.string().required(),
+  }).required(),
 });
 
 const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
   let doc = req.body;
   try {
     let newUser: any = await createUser(doc);
-    console.log("newUser-newUser-newUser", newUser);
     if (newUser.status === 'failed') {
       res.status(403).json({
         status: newUser.status,

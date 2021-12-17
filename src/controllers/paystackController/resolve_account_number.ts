@@ -20,8 +20,6 @@ const resolve_account_number: RequestHandler = async (req: Request, res) => {
   } catch (e:any) {
     return res.status(422).send(e.response.data);
   }
-
-
 };
 
 export default resolve_account_number;

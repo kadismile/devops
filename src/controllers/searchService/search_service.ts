@@ -20,10 +20,10 @@ const search_service: RequestHandler = async (req: Request<{}, {}>, res) => {
     useUnifiedTopology: true,
   });
 
-  const doc = req.body
-  let query = doc.query
-  let type = doc.type
-  let searchTerm = doc.searchTerm
+  const doc = req.body;
+  let query = doc.query;
+  let type = doc.type;
+  let searchTerm = doc.searchTerm;
   let limit: any = 50;
   if (query.limit ) {
     limit = parseInt(limit, 10);
@@ -85,6 +85,5 @@ function isPhone(searchTerm: any) {
 function ifNumberSearch(searchTerm: any) {
   return /^\d+$/.test(searchTerm)
 }
-
 
 export default requestMiddleware(search_service, { validation: { body: searchSchema } });
