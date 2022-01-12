@@ -50,7 +50,7 @@ const search_service: RequestHandler = async (req: Request<{}, {}>, res) => {
           query: searchTerm,
           path: fields,
           fuzzy: { maxEdits: 2, prefixLength: 2 },
-          score: {boost: { value: 2 },},
+          score: {boost: { value: 5 },},
         },
       }
     }
