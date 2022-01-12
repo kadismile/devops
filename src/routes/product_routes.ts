@@ -9,7 +9,7 @@ product_routes.post('/create', protect, multerUpload, productController.create_p
 product_routes.post('/variant/create', protect, multerUpload, productController.create_product_variant);
 product_routes.post('/brand/create', productController.create_product_brand);
 product_routes.get('/', productController.get_product);
-product_routes.get('/update', protect, multerUpload, productController.update_product);
+product_routes.post('/update', protect, multerUpload, productController.update_product);
 product_routes.get('/get/variant', productController.get_variant);
 
 
