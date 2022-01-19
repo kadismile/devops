@@ -60,6 +60,14 @@ const schema = new Schema<IVendor>({
 
 schema.plugin(TimeStampPlugin);
 
+/*schema.pre('findOne', async function() {
+  this.where({ isActive: true })
+});
+
+schema.pre('find', async function() {
+  this.where({ isActive: true })
+});*/
+
 
 const Vendor: IVendorModel = model<IVendor, IVendorModel>('Vendor', schema);
 
