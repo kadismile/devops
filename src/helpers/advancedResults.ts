@@ -46,6 +46,8 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
           [key]: queryStr ? JSON.parse(queryStr) : 1,
         };
       }
+    } else {
+      query = reqQuery
     }
 
     query = model.find(query);
