@@ -1,9 +1,7 @@
 import { Request, RequestHandler } from 'express';
 import Vendor from "../../models/Vendor";
 import Joi from "@hapi/joi";
-import { advancedResults } from '../../helpers/advancedResults'
 import requestMiddleware from "@middleware/request-middleware";
-import {LoginSchema} from "../authController/login";
 import Product from "../../models/Product";
 
 export const vendorSchema = Joi.object().keys({

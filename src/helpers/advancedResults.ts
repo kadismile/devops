@@ -47,6 +47,8 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
         };
       }
     } else {
+      if (reqQuery?.page)
+      delete reqQuery?.page;
       query = reqQuery
     }
 
@@ -73,7 +75,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     const endIndex = page * limit;
     const total = await model.countDocuments();
 
-    if (req.query.skip) {
+    if (req.query.page) {
       query = query.skip(endIndex);
     }
 
