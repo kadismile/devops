@@ -1,11 +1,7 @@
 import { Request, RequestHandler } from 'express';
 import Joi from '@hapi/joi';
-import _ from 'lodash';
 import requestMiddleware from '../../middleware/request-middleware';
 import Product from '../../models/Product';
-import Attachment from '../../models/Attachment';
-import User from '../../models/User';
-import Category from '../../models/Category';
 import { uploadAttachments } from '../../helpers/uploadAttachments';
 
 export const addProductSchema = Joi.object().keys({
