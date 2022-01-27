@@ -6,16 +6,27 @@ import Category from '../../models/Category';
 
 export const categorySchema = Joi.object().keys({
   categoryId: Joi.string().required(),
-  specificationIds: Joi.array()
+  name: Joi.string(),
+  specificationIds: Joi.array(),
+  user: Joi.object().required()
 });
 
 const update_category: RequestHandler = async (req: Request<{}, {}>, res) => {
-  let doc = req.body
+  let doc = req.body;
   try {
-    let category = await Category.findByIdAndUpdate(doc.categoryId,
-      {name: doc.name, $push: { specifications: doc.specificationIds } },
-      { new: true, useFindAndModify: false }
-    )
+    let category;
+    if (doc.specificationIds && doc.specificationIds.length) {
+      category = await Category.findByIdAndUpdate(doc.categoryId,
+        { $push: { specifications: doc.specificationIds } },
+        { new: true, useFindAndModify: false }
+      )
+    } else {
+      category = await Category.findByIdAndUpdate(doc.categoryId,
+        {name: doc.name },
+        { new: true, useFindAndModify: false }
+      )
+    }
+
     res.status(200).json({
       status: "success",
       data: category
