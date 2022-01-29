@@ -15,10 +15,12 @@ export const createOrderItems = async (doc: any) => {
       headers: {
         Authorization: doc.token
       }
-    })
+    });
     response = resp.data
   } catch (err: any) {
     response = err
+    console.log("Response 111", response)
   }
+  console.log("Response 222", response)
   return response.data
 }

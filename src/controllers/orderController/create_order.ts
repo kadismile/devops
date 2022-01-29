@@ -79,7 +79,7 @@ const validateOrder = async (doc: any) => {
     response.status = 'success';
     response.phoneNumber = validPhoneNumber
   } else {
-    response.status = 'failed',
+    response.status = 'failed';
     response.user = !user?._id ?`user cannot be found with _id ${doc.userId}`: undefined;
     response.vendors = !(vendors || vendors.length) ?`some vendors could be found within _id(s) ${uniqueVendorIds}` : undefined;
     response.phoneNumber = !validPhoneNumber ? `phone number ${doc.shippingAddress.phoneNumber}, is not valid` : undefined;

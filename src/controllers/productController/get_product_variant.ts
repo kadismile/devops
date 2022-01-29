@@ -1,5 +1,4 @@
 import { Request, RequestHandler } from 'express';
-import Product from "../../models/Product";
 import Joi from "@hapi/joi";
 import requestMiddleware from "@middleware/request-middleware";
 import ProductVariant from "../../models/ProductVariant";
