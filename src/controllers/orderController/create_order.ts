@@ -73,7 +73,12 @@ const validateOrder = async (doc: any) => {
   const uniqueVendorIds = _.uniq(doc.vendorIds)
   const user: any = await User.findById(doc.userId)
   const vendors: any = await Vendor.find({ _id: { $in: uniqueVendorIds } });
-  const validPhoneNumber = prepareValidPhoneNumber(doc.shippingAddress)
+  const validPhoneNumber = prepareValidPhoneNumber(doc.shippingAddress);
+
+  console.log("user", user)
+  console.log("vendors ", vendors)
+  console.log("uniqueVendorIds ", uniqueVendorIds)
+  console.log("user", validPhoneNumber)
 
   if (user?._id &&  (vendors?.length === uniqueVendorIds.length) && validPhoneNumber ) {
     response.status = 'success';
@@ -81,7 +86,7 @@ const validateOrder = async (doc: any) => {
   } else {
     response.status = 'failed';
     response.user = !user?._id ?`user cannot be found with _id ${doc.userId}`: undefined;
-    response.vendors = !(vendors || vendors.length) ?`some vendors could be found within _id(s) ${uniqueVendorIds}` : undefined;
+    response.vendors = vendors?.length ? undefined : `some vendors could be found within _id(s) ${uniqueVendorIds}`;
     response.phoneNumber = !validPhoneNumber ? `phone number ${doc.shippingAddress.phoneNumber}, is not valid` : undefined;
   }
   return response
