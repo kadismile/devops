@@ -2,11 +2,13 @@ import {Request, RequestHandler} from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import Category from '../../models/Category';
+import Product from "../../models/Product";
 
 
 export const categorySchema = Joi.object().keys({
   categoryId: Joi.string().required(),
   name: Joi.string(),
+  isActive: Joi.boolean(),
   specificationIds: Joi.array(),
   user: Joi.object().required()
 });
@@ -21,9 +23,13 @@ const update_category: RequestHandler = async (req: Request<{}, {}>, res) => {
         { new: true, useFindAndModify: false }
       )
     } else {
-      category = await Category.findByIdAndUpdate(doc.categoryId,
-        {name: doc.name },
+      category = await Category.findByIdAndUpdate(
+        doc.categoryId, doc ,
         { new: true, useFindAndModify: false }
+      )
+      await Product.updateMany({category: doc.categoryId},
+        { isActive: doc.isActive },
+        { new: true, useFindAndModify: false, multi: true }
       )
     }
 

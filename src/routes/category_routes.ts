@@ -9,7 +9,6 @@ const category_routes = Router();
 category_routes.get('/', categoryController.get_category);
 category_routes.post('/create', protect, categoryController.create_category);
 category_routes.post('/upload', protect, multerUpload, categoryController.upload_category_by_csv);
-category_routes.post('/remove', protect, categoryController.delete_category);
 category_routes.post('/update', protect, categoryController.update_category);
 
 export default category_routes;
