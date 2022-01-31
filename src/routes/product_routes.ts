@@ -17,6 +17,8 @@ product_routes.post('/brand/upload', protect, multerUpload, categoryController.u
 product_routes.get('/', productController.get_product);
 product_routes.post('/update', protect, multerUpload, productController.update_product);
 product_routes.get('/variants', productController.get_product_variant);
+product_routes.post('/variants/upload', multerUpload, productController.upload_variant_by_csv);
+product_routes.post('/variant/delete', protect, productController.delete_variant);
 
 
 export default product_routes;

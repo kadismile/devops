@@ -52,7 +52,7 @@ export const delete_product_brand: RequestHandler = async (req: Request<{}, {}>,
   }
 };
 
-export const upload_category_by_csv: RequestHandler = async (req: Request<{}, {}>, res) => {
+export const upload_brand_by_csv: RequestHandler = async (req: Request<{}, {}>, res) => {
   try {
     let files: any = req.files;
     if (!files || files.length === 0) {
