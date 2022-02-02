@@ -8,6 +8,8 @@ import CSVToJSON from "csvtojson";
 import * as fs from "fs";
 import Specification from "../../models/Specification";
 import _ from "lodash";
+import Category from "../../models/Category";
+import Product from "../../models/Product";
 
 export const addProductSchema = Joi.object().keys({
   name: Joi.string().required(),
@@ -89,6 +91,25 @@ export const delete_variant: RequestHandler = async (req: Request<{}, {}>, res) 
     res.status(200).json({
       status: "success",
       message: "productVariant deleted"
+    });
+  } catch (e: any) {
+    res.status(403).json({
+      status: "failed",
+      message: e.message
+    });
+  }
+};
+
+export const update_variant: RequestHandler = async (req: Request<{}, {}>, res) => {
+  let doc = req.body;
+  try {
+    let pVariant = await ProductVariant.findByIdAndUpdate(
+        doc.pVariantId, doc ,
+        { new: true, useFindAndModify: false }
+      )
+    res.status(200).json({
+      status: "success",
+      data: pVariant
     });
   } catch (e: any) {
     res.status(403).json({
