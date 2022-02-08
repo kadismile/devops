@@ -32,7 +32,7 @@ const schema = new Schema<IVendor>({
     optional: true,
   },
   businessAddress: {
-    type : Array,
+    type : Object,
     required: [true, 'Please add an address']
   },
   businessOwner: {
