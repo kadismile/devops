@@ -8,6 +8,7 @@ import * as categoryController from "../controllers/categoryController";
 const product_routes = Router();
 
 product_routes.post('/create', protect, multerUpload, productController.create_product);
+product_routes.post('/upload', protect, multerUpload, productController.upload_products_by_csv);
 product_routes.post('/variant/create', protect, multerUpload, productController.create_product_variant);
 product_routes.post('/brand/create', productController.create_product_brand);
 product_routes.get('/brands', protect, productController.get_product_brand);

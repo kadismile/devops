@@ -12,6 +12,7 @@ import { get_product_variant } from './get_product';
 import { upload_variant_by_csv } from './create_product_variant';
 import { delete_variant } from './create_product_variant';
 import { update_variant } from './create_product_variant';
+import upload_products_by_csv  from './upload_products';
 
 export {
   create_product,
@@ -27,5 +28,6 @@ export {
   get_product_variant,
   upload_variant_by_csv,
   delete_variant,
-  update_variant
+  update_variant,
+  upload_products_by_csv
 };

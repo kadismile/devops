@@ -12,6 +12,8 @@ export const updateUserSchema = Joi.object().keys({
   email: Joi.string().email({ tlds: { allow: false } }),
   address: Joi.object({
     country: Joi.string(),
+    city: Joi.string(),
+    state: Joi.string(),
     phoneNumber: Joi.string(),
     fullAddress: Joi.string(),
     countryCode: Joi.string(),
