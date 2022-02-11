@@ -3,9 +3,8 @@ import CSVToJSON from 'csvtojson';
 import * as fs from 'fs';
 import ProductVariant from '../../models/ProductVariant';
 import Category from '../../models/Category';
-import Vendor from '../../models/Vendor';
 import ProductBrand from '../../models/ProductBrand';
-import Product from '../../models/Product';
+import AdminProduct from '../../models/AdminProduct';
 
 
 const upload_products_by_csv: RequestHandler = async (req: Request<{}, {}>, res) => {
@@ -20,7 +19,7 @@ const upload_products_by_csv: RequestHandler = async (req: Request<{}, {}>, res)
       const productCsv =  await CSVToJSON().fromFile(`./attachments/csv/${files[0].originalname}`);
       let errors: any = [];
       for (const product of productCsv) {
-        const validation: any = await validateCsv(product);
+        const validation: any = await validateCsvAndCreate(product);
         if (validation) {
           errors.push(validation);
         }
@@ -37,9 +36,11 @@ const upload_products_by_csv: RequestHandler = async (req: Request<{}, {}>, res)
           data: 'product successfully uploaded via csv',
         });
       }
-    } catch (e) {
+    } catch (e: any) {
       res.status(403).json({
         error: e,
+        status: 'failed',
+        message: e.message
       });
     }
   } catch (error: any) {
@@ -47,11 +48,9 @@ const upload_products_by_csv: RequestHandler = async (req: Request<{}, {}>, res)
   }
 };
 
-export async function validateCsv(product: any) {
-  let vendor: any;
+export async function validateCsvAndCreate(product: any) {
   let values: any = await Promise.all([
     await ProductVariant.findOne({_id: product.productVariantId}),
-    vendor = await Vendor.findOne({_id: product.vendor}),
     await Category.findOne({_id: product.category}),
     await ProductBrand.findOne({_id: product.productBrand}),
    ]);
@@ -59,10 +58,8 @@ export async function validateCsv(product: any) {
   if (values.includes(null)) {
     return product;
   } else {
-    product.user = vendor.user;
-    product.adminProduct = true;
-    const newProduct = new Product(product);
-    await newProduct.save();
+    const adminProduct = new AdminProduct(product);
+    await adminProduct.save();
   }
   return null
 }
