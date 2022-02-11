@@ -1,13 +1,23 @@
 import { Request, RequestHandler } from 'express';
 import Product from "../../models/Product";
-import Joi from "@hapi/joi";
 import { advancedResults } from '../../helpers/advancedResults'
 import requestMiddleware from "@middleware/request-middleware";
 import ProductBrand from "../../models/ProductBrand";
 import ProductVariant from "../../models/ProductVariant";
+import AdminProduct from '../../models/AdminProduct';
 
 export const get_product: RequestHandler = async (req: Request, res) => {
   let product: any = await advancedResults(req, Product, ["attachments", "category", "vendor", "user"])
+  if (product?.data) {
+    res.status(200).json({
+      status: "success",
+      data: product
+    });
+  }
+};
+
+export const get_admin_product: RequestHandler = async (req: Request, res) => {
+  let product: any = await advancedResults(req, AdminProduct, ["attachments", "category"])
   if (product?.data) {
     res.status(200).json({
       status: "success",

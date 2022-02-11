@@ -15,6 +15,7 @@ product_routes.post('/brand/delete', protect, productController.delete_product_b
 product_routes.post('/brand/update', protect, productController.update_brand);
 product_routes.post('/brand/upload', protect, multerUpload, productController.upload_brand_by_csv);
 product_routes.get('/', productController.get_product);
+product_routes.get('/admin', productController.get_admin_product);
 product_routes.post('/update', protect, multerUpload, productController.update_product);
 product_routes.get('/variants', productController.get_product_variant);
 product_routes.post('/variants/upload', multerUpload, productController.upload_variant_by_csv);
