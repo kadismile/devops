@@ -1,9 +1,7 @@
 import { Request, RequestHandler } from 'express';
 import requestMiddleware from '@middleware/request-middleware';
-import Joi from "@hapi/joi";
 import Category from "../../models/Category";
 import {advancedResults} from "../../helpers/advancedResults";
-import Product from "../../models/Product";
 
 
 const get_category: RequestHandler = async (req: Request, res) => {

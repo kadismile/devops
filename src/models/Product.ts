@@ -73,6 +73,12 @@ const schema = new Schema<IProduct>({
       return true;
     }
   },
+  adminProduct: {
+    type: Boolean,
+    default: function() {
+      return false;
+    }
+  },
 },{versionKey: false});
 
 // Add timestamp plugin for createdAt and updatedAt in miliseconds from epoch
