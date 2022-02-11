@@ -5,6 +5,7 @@ import protect from '@middleware/auth-middleware'
 const user_routes = Router();
 
 user_routes.get('/get', protect, authController.get_user);
+user_routes.get('/fetch', protect, authController.get_users);
 user_routes.post('/create', authController.create_user);
 user_routes.post('/login', authController.login);
 user_routes.post('/login-token', authController.login_token);

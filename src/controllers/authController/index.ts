@@ -5,9 +5,11 @@ import login_token from './login_token';
 import update_user from './update_user';
 import recover_password from './recover_password';
 import change_password from './change_password';
+import {get_users} from './get_user';
 
 export {
   get_user,
+  get_users,
   create_user,
   login,
   update_user,
