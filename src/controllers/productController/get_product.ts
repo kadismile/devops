@@ -5,6 +5,7 @@ import requestMiddleware from "@middleware/request-middleware";
 import ProductBrand from "../../models/ProductBrand";
 import ProductVariant from "../../models/ProductVariant";
 import AdminProduct from '../../models/AdminProduct';
+import Category from '../../models/Category';
 
 export const get_product: RequestHandler = async (req: Request, res) => {
   let product: any = await advancedResults(req, Product, ["attachments", "category", "vendor", "user"])
@@ -44,5 +45,27 @@ export const get_product_variant: RequestHandler = async (req: Request, res) => 
       data: productVariant
     });
   }
+};
+
+export const get_product_by_category: RequestHandler = async (req: Request, res) => {
+  let categoryId = req.body.categoryId;
+  const category:any = await Category.findOne({ _id: categoryId });
+  if (category) {
+    const products = await Product.find({ category: categoryId });
+    const totalPrice = products.reduce(( a:number, b:any ) => a+b.price, 0);
+    res.status(200).json({
+      status: "success",
+      data: {
+        productCount: products.length,
+        totalPrice
+      }
+    });
+  } else {
+    res.status(404).json({
+      status: "failed",
+      message: "invalid categoryId"
+    });
+  }
+
 };
 export default requestMiddleware(get_product);

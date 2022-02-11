@@ -1,6 +1,6 @@
 import { Request, RequestHandler } from 'express';
 import requestMiddleware from '@middleware/request-middleware';
-import Order from "../../models/Category";
+import Order from "../../models/Order";
 import {advancedResults} from "../../helpers/advancedResults";
 
 
