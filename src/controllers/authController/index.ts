@@ -6,6 +6,7 @@ import update_user from './update_user';
 import recover_password from './recover_password';
 import change_password from './change_password';
 import {get_users} from './get_user';
+import {updatePassword} from './change_password';
 
 export {
   get_user,
@@ -15,5 +16,6 @@ export {
   update_user,
   recover_password,
   change_password,
-  login_token
+  login_token,
+  updatePassword,
 };
