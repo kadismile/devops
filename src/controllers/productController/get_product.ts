@@ -59,7 +59,8 @@ export const get_product_by_category: RequestHandler = async (req: Request, res)
       const products = await Product.find({ category: catId });
       const totalPrice = products.reduce(( a:number, b:any ) => a + b.price, 0);
       data.push({
-        [category.name]: products.length,
+        "category": category.name,
+        "totalNum": products.length,
         totalPrice
       })
     }
