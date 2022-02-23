@@ -5,12 +5,13 @@ import {Request, RequestHandler} from "express";
 
 export const ChangePasswordSchema = Joi.object().keys({
   newPassword: Joi.string().required(),
-  resetPasswordToken: Joi.string().required()
+  resetPasswordToken: Joi.string().required(),
+  email: Joi.string().required()
 });
 
 const changePassword: RequestHandler = async (req: Request<{}, {}>, res) => {
-  let { newPassword, resetPasswordToken } = req.body;
-  const user: any =  await User.findOne({ resetPasswordToken: resetPasswordToken }).select('+password');
+  const { newPassword, resetPasswordToken, email } = req.body;
+  const user: any =  await User.findOne({ resetPasswordToken: resetPasswordToken, email }).select('+password');
   if (user) {
     await User.findByIdAndUpdate(user._id, {
       resetPasswordToken: "null", password: newPassword }, {
