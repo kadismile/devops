@@ -14,7 +14,7 @@ const recoverPassword: RequestHandler = async (req: Request<{}, {}>, res) => {
   let { email } = req.body;
   const user: any =  await User.findOne({ email: email })
   if (user) {
-    const resetPasswordToken = user.getSignedJwtToken("1h");
+    const resetPasswordToken = "123456" /*user.getSignedJwtToken("1h")*/ ;
     await User.findByIdAndUpdate(user._id, {
       resetPasswordToken
     }, {
