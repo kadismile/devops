@@ -7,6 +7,7 @@ import kue from "kue";
 import Mailer from "../../helpers/mailer";
 import Vendor from "../../models/Vendor";
 import { authenticateUser } from '../../helpers/authenticateUser';
+import { findUserByEmailOrPhone } from '../../helpers/userHelper';
 
 export const LoginSchema = Joi.object().keys({
   password: Joi.string().required(),
@@ -15,22 +16,30 @@ export const LoginSchema = Joi.object().keys({
 });
 
 const login: RequestHandler = async (req: Request<{}, {}>, res) => {
-  const auth = await authenticateUser(req.body);
-  const vendor = await Vendor.findOne({ user: auth._id });
-  if (vendor) {
-    res.status(200).json({
-      status: "success",
-      token: auth.token,
-      user: auth.user,
-      vendor
-    });
-  } else {
-    res.status(401).json({
-      status: "failed",
-      data: "Invalid credentials"
-    });
+  let { email, phoneNumber, password } = req.body;
+  if (phoneNumber || email) {
+    try {
+      const user:any = await findUserByEmailOrPhone(phoneNumber, email);
+      const vendor: any = await Vendor.findOne({ user: user._id })
+      const isMatch = await user.matchPassword(password);
+      if (!isMatch || !vendor) {
+        res.status(401).json({
+          status: "failed",
+          data: "Invalid credentials"
+        });
+      } else {
+        const token = user.getSignedJwtToken();
+        delete user.password;
+        res.status(200).json({
+          status: "success",
+          token,
+          vendor: await Vendor.findOne({ user: user._id })
+        });
+      }
+    } catch (e: any) {
+      throw new ApplicationError(e.message, 500)
+    }
   }
-
 };
 
 export default requestMiddleware(login, { validation: { body: LoginSchema } });
