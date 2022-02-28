@@ -6,6 +6,7 @@ import ApplicationError from '../../errors/application-error';
 import kue from "kue";
 import Mailer from "../../helpers/mailer";
 import Vendor from "../../models/Vendor";
+import { findUserByEmailOrPhone } from '../../helpers/userHelper';
 
 export const LoginSchema = Joi.object().keys({
   password: Joi.string().required(),
@@ -25,14 +26,9 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
 
   if (phoneNumber || email) {
     try {
-      if (phoneNumber?.startsWith("0")) {
-        phoneNumber = "+234" + phoneNumber.split("").splice(1).join("")
-      }
-      const user: any = await User.findOne( { $or:[
-          { email },
-          { phoneNumber: { $in: phoneNumber} } ] })
-          .select('+password');
-      if (!user) {
+      const user:any = await findUserByEmailOrPhone(phoneNumber, email);
+      const vendor:any = await Vendor.findOne({ user: user._id });
+      if (vendor || !user) {
         res.status(401).json({
           data: "Invalid credentials"
         });
@@ -50,12 +46,11 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
         });
       } else {
         const token = user.getSignedJwtToken();
-        const vendor = await Vendor.findOne({user: user._id});
+        delete user.password;
         res.status(200).json({
           status: "success",
           token,
-          user: await User.findOne({ _id: user._id }),
-          vendor: vendor ? vendor : undefined
+          user
         });
         /*if (!user.loginToken) {
           const loginToken = Math.floor(1000 + Math.random() * 900000);
