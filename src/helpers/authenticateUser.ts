@@ -2,13 +2,14 @@ import accessEnv from "./accessEnv";
 import axios from "axios";
 
 export const authenticateUser = async (doc: any) => {
-  const { email, password } = doc
+  const { email, password, vendor } = doc
   let response
   try {
     const DOMAIN_URL = accessEnv("DOMAIN_URL")
+    const urlParams = vendor ? 'api/v1/vendors/login' : 'api/v1/users/login';
     const resp = await axios({
       method: 'post',
-      url: `${DOMAIN_URL}/api/v1/users/login`,
+      url: `${DOMAIN_URL}/${urlParams}`,
       data: { email, password }
     })
     response = resp.data

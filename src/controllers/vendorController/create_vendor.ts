@@ -4,6 +4,7 @@ import requestMiddleware from '../../middleware/request-middleware';
 import Vendor from '../../models/Vendor';
 import { createUser } from '../../helpers/createUser'
 import User from "../../models/User";
+import { authenticateUser } from '../../helpers/authenticateUser';
 
 export const addVendorSchema = Joi.object().keys({
   businessName: Joi.string().required(),
@@ -45,9 +46,13 @@ const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
       req.body.user = newUser._id;
       const vendor = new Vendor(req.body);
       await vendor.save();
+      doc = { email: doc.email, password: doc.password, vendor: vendor._id };
+      const authVendor = await authenticateUser(doc);
+      const {token } = authVendor;
       res.status(201).json({
         status: "success",
         data: {
+          token,
           vendor: vendor.toJSON(),
           user: newUser
         }
