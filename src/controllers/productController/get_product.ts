@@ -49,14 +49,14 @@ export const get_product_variant: RequestHandler = async (req: Request, res) => 
 };
 
 export const get_product_by_category: RequestHandler = async (req: Request, res) => {
-  const { user } = req.body;
+  const { vendorId } = req.body;
 
   const categories:any = await Category.find({}).select('_id');
   const categoryIds = _.map(categories, '_id');
   let data: any = [];
 
   if (categoryIds.length) {
-    const products: any = await Product.find({ category: {$in: categoryIds}, vendor: user._id }).select(['price', 'category']);
+    const products: any = await Product.find({ category: {$in: categoryIds}, vendor: vendorId }).select(['price', 'category']);
     const categories = await Category.find({ _id: {$in: categoryIds } }).select('name');
 
     for (let catId of categoryIds) {

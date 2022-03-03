@@ -76,11 +76,6 @@ const validateOrder = async (doc: any) => {
   const vendors: any = await Vendor.find({ _id: { $in: uniqueVendorIds } });
   const validPhoneNumber = prepareValidPhoneNumber(doc.shippingAddress);
 
-  console.log("user", user)
-  console.log("vendors ", vendors)
-  console.log("uniqueVendorIds ", uniqueVendorIds)
-  console.log("user", validPhoneNumber)
-
   if (user?._id &&  (vendors?.length === uniqueVendorIds.length) && validPhoneNumber ) {
     response.status = 'success';
     response.phoneNumber = validPhoneNumber
