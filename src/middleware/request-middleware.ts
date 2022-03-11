@@ -17,6 +17,7 @@ const getMessageFromJoiError = (error: Joi.ValidationError): string | undefined 
 interface HandlerOptions {
   validation?: {
     body?: Joi.ObjectSchema
+    query?: Joi.ObjectSchema
   }
 }
 
