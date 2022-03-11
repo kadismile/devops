@@ -59,3 +59,11 @@ export interface IOrder extends ITimeStampedDocument {
   price: number,
   attachments: [string]
 }
+
+export interface IAccount extends ITimeStampedDocument {
+  bank: [object],
+  primaryAccount: object,
+  user: string,
+  vendor: string,
+  history: [object]
+}
