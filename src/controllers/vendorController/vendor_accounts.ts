@@ -10,6 +10,7 @@ let accountSchema = Joi.object().keys({
   bank: Joi.object({
     bankName: Joi.string().required(),
     accountNumber: Joi.string().required(),
+    bankCode: Joi.string().required(),
   }).required(),
 });
 
