@@ -8,8 +8,6 @@ import * as fs from "fs";
 export const upload_category_by_csv: RequestHandler = async (req: Request<{}, {}>, res) => {
   try {
     let files: any = req.files;
-    console.log('--------------> we are here ')
-    console.log("files -------> ", files)
     if (!files || files.length === 0) {
       res.status(403).json({
         message: 'Kindly upload a csv file',
@@ -17,10 +15,16 @@ export const upload_category_by_csv: RequestHandler = async (req: Request<{}, {}
     }
     try {
       let categoryCsv =  await CSVToJSON().fromFile(`./attachments/csv/${files[0].originalname}`);
-      for (const cat of categoryCsv) {
-        await Category.create(cat)
+      if (categoryCsv.length) {
+        for (const cat of categoryCsv) {
+          await Category.create(cat)
+        }
+        await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
+      } else {
+        res.status(403).json({
+          error: 'invalid file format',
+        });
       }
-      await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
     } catch (e) {
       res.status(403).json({
         error: e,

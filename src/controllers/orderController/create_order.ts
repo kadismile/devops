@@ -52,7 +52,8 @@ const create_order: RequestHandler = async (req: Request<{}, {}>, res) => {
         userId: doc.userId,
         shippingAddress: doc.shippingAddress,
         orderItems: orderItems.items,
-        vendor: orderItems[0].vendorId
+        vendor: orderItems.items[0].vendorId,
+        shippingStatus: 'in-progress'
       }
       order = new Order(orderDoc)
       await order.save();
