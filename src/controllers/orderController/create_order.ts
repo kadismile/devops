@@ -11,6 +11,7 @@ import prepareValidPhoneNumber from '../../helpers/prepareValidPhoneNumber';
 export const orderSchema = Joi.object().keys({
   userId: Joi.string().required(),
   vendorIds: Joi.array().required(),
+  shippingMethod: Joi.string().required(),
   shippingAddress: Joi.object({
     country: Joi.string().required(),  
     countryCode: Joi.string().required(),  
@@ -53,7 +54,8 @@ const create_order: RequestHandler = async (req: Request<{}, {}>, res) => {
         shippingAddress: doc.shippingAddress,
         orderItems: orderItems.items,
         vendor: orderItems.items[0].vendorId,
-        shippingStatus: 'in-progress'
+        shippingStatus: 'in-progress',
+        shippingMethod: doc.shippingMethod
       }
       order = new Order(orderDoc)
       await order.save();
