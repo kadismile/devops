@@ -10,6 +10,8 @@ import Specification from "../../models/Specification";
 import _ from "lodash";
 import Category from "../../models/Category";
 import Product from "../../models/Product";
+import ProductBrand from '../../models/ProductBrand';
+import AdminProduct from '../../models/AdminProduct';
 
 export const addProductSchema = Joi.object().keys({
   name: Joi.string().required(),
@@ -55,14 +57,21 @@ export const upload_variant_by_csv: RequestHandler = async (req: Request<{}, {}>
     }
     try {
       let variantCsv =  await CSVToJSON().fromFile(`./attachments/csv/${files[0].originalname}`);
-      for (const variant of variantCsv) {
-        const {categoryId, name} = variant;
-        const variantDoc: any = {categoryId, name};
-        let specifications = await Specification.find({categories: {$in: [categoryId]}});
-        variantDoc.specifications = _.map(specifications, '_id');
-        await ProductVariant.create(variantDoc);
+      let errors: any = [];
+      if (variantCsv.length) {
+        for (const variant of variantCsv) {
+          const validation: any = await validateCsvAndCreate(variant);
+          if (validation) {
+            errors.push(validation);
+          }
+        }
+        await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
+      } else {
+        res.status(403).json({
+          error: 'invalid file format',
+        });
       }
-      await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
+
     } catch (e) {
       res.status(403).json({
         error: e,
@@ -135,6 +144,26 @@ const createSpecifications = async (doc: any, token: string) => {
     response = err.response.data
   }
   return response
+}
+
+const validateCsvAndCreate = async (variant: any) => {
+  const { categoryId, name } = variant;
+  const cat = await Category.findOne({
+    $or: [
+      { _id: categoryId },
+      { name}
+    ],
+  });
+
+  if (cat) {
+    return cat;
+  } else {
+    const variantDoc: any = { categoryId, name };
+    let specifications = await Specification.find({categories: {$in: [categoryId]}});
+    variantDoc.specifications = _.map(specifications, '_id');
+    await ProductVariant.create(variantDoc);
+  }
+  return null
 }
 
 

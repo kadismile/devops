@@ -32,6 +32,9 @@ const schema = new Schema<IOrder>({
   shippingStatus: {
     type: String
   },
+  shippingMethod: {
+    type: String
+  },
   isActive: {
     type: Boolean,
     default: function() {

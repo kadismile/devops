@@ -27,6 +27,7 @@ const create_product_brand: RequestHandler = async (req: Request<{}, {}>, res) =
     });
   }
 };
+
 export default requestMiddleware(create_product_brand, { validation: { body: productBrandSchema } });
 
 export const delete_product_brand: RequestHandler = async (req: Request<{}, {}>, res) => {
@@ -62,10 +63,31 @@ export const upload_brand_by_csv: RequestHandler = async (req: Request<{}, {}>, 
     }
     try {
       let brandCsv =  await CSVToJSON().fromFile(`./attachments/csv/${files[0].originalname}`);
-      for (const brand of brandCsv) {
-        await ProductBrand.create(brand)
+      let errors: any = [];
+      if (brandCsv.length) {
+        for (const proBrand of brandCsv) {
+          const validation: any = await validateCsvAndCreate(proBrand);
+          if (validation) {
+            errors.push(validation);
+          }
+        }
+        await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
+        if (errors.length) {
+          res.status(403).json({
+            status: 'failed',
+            data: errors,
+          });
+        } else {
+          res.status(201).json({
+            status: 'success',
+            data: 'product brand successfully uploaded via csv',
+          });
+        }
+      } else {
+        res.status(403).json({
+          error: 'invalid file format',
+        });
       }
-      await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
     } catch (e) {
       res.status(403).json({
         error: e,
@@ -79,3 +101,14 @@ export const upload_brand_by_csv: RequestHandler = async (req: Request<{}, {}>, 
     res.status(500).json({ status: 'failed', message: error.message });
   }
 };
+
+const  validateCsvAndCreate = async (proBrand: any) => {
+  const pBrand = await ProductBrand.findOne({ name: proBrand.name })
+  if (pBrand) {
+    return pBrand;
+  } else {
+    const newPbrand = new Category(proBrand);
+    await newPbrand.save();
+  }
+  return null
+}
