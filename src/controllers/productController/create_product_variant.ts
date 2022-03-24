@@ -1,17 +1,13 @@
-import {Request, RequestHandler} from 'express';
+import { Request, RequestHandler } from 'express';
 import Joi from '@hapi/joi';
 import requestMiddleware from '../../middleware/request-middleware';
 import ProductVariant from '../../models/ProductVariant';
-import accessEnv from "../../helpers/accessEnv";
-import axios from "axios";
-import CSVToJSON from "csvtojson";
-import * as fs from "fs";
-import Specification from "../../models/Specification";
-import _ from "lodash";
-import Category from "../../models/Category";
-import Product from "../../models/Product";
-import ProductBrand from '../../models/ProductBrand';
-import AdminProduct from '../../models/AdminProduct';
+import accessEnv from '../../helpers/accessEnv';
+import axios from 'axios';
+import CSVToJSON from 'csvtojson';
+import * as fs from 'fs';
+import ApplicationError from '../../errors/application-error';
+import _ from 'lodash';
 
 export const addProductSchema = Joi.object().keys({
   name: Joi.string().required(),
@@ -51,12 +47,10 @@ export const upload_variant_by_csv: RequestHandler = async (req: Request<{}, {}>
   try {
     const files: any = req.files;
     if (!files || files.length === 0) {
-      res.status(403).json({
-        message: 'Kindly upload a csv file',
-      });
+      throw new ApplicationError(`Kindly upload a csv file`, 403)
     }
     try {
-      let variantCsv =  await CSVToJSON().fromFile(`./attachments/csv/${files[0].originalname}`);
+      const variantCsv =  await CSVToJSON().fromFile(`./attachments/csv/${files[0].originalname}`);
       let errors: any = [];
       if (variantCsv.length) {
         for (const variant of variantCsv) {
@@ -66,6 +60,17 @@ export const upload_variant_by_csv: RequestHandler = async (req: Request<{}, {}>
           }
         }
         await fs.unlinkSync(`./attachments/csv/${files[0].originalname}`)
+        if (errors.length) {
+          res.status(403).json({
+            status: 'failed',
+            data: errors,
+          });
+        } else {
+          res.status(201).json({
+            status: 'success',
+            data: 'category successfully uploaded via csv',
+          });
+        }
       } else {
         res.status(403).json({
           error: 'invalid file format',
@@ -144,45 +149,29 @@ const createSpecifications = async (doc: any, token: string) => {
     response = err.response.data
   }
   return response
-}
+};
 
 const validateCsvAndCreate = async (variant: any) => {
-  const { categoryId, name } = variant;
-  const cat = await Category.findOne({
-    $or: [
-      { _id: categoryId },
-      { name}
-    ],
-  });
-
-  if (cat) {
-    return cat;
-  } else {
-    const variantDoc: any = { categoryId, name };
-    let specifications = await Specification.find({categories: {$in: [categoryId]}});
-    variantDoc.specifications = _.map(specifications, '_id');
-    await ProductVariant.create(variantDoc);
+  const { categoryId, name, ...specifications } = variant;
+  const pV: any = await ProductVariant.findOne({ name });
+  variant.error = [];
+  if (pV || _.isEmpty(specifications)) {
+    variant.error.push( pV ? `Variant already exist` : 'Invalid CSV uploaded');
+    return variant
   }
-  return null
-}
 
+  let variantSpec: { [key: string] : any } = {}
+  for (const spec in specifications) {
+    const properties = specifications[spec]
+    variantSpec[spec] = properties.split(",")
+  }
 
-/*specDocs --->   [
-  {
-    productVariants: [],
-    _id: 'CghdlGijxx73PdNSNTxLOhFph',
-    categories: [ 'EG4paBmwFXh3UPXFubrs26m97' ],
-    name: 'MPN',
-    createdAt: '2021-10-08T06:06:11.395Z',
-    updatedAt: '2021-10-08T06:06:11.395Z',
-    isActive: true
-  },
-  {
-    productVariants: [],
-    _id: 'PXMxu6MvmQPWsLHiPiGNbrPJy',
-    categories: [ 'EG4paBmwFXh3UPXFubrs26m97' ],
-    name: 'Unlocked',
-    createdAt: '2021-10-08T06:06:11.395Z',
-    updatedAt: '2021-10-08T06:06:11.395Z',
-    isActive: true
-  },*/
+  variant.specifications = variantSpec;
+  const createdVariant = await ProductVariant.create(variant);
+  if (!createdVariant) {
+    variant.error.push("cannot create variant")
+    return variant
+  } else {
+    return null
+  }
+};
