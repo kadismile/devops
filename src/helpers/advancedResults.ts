@@ -1,17 +1,20 @@
 import _ from 'lodash';
 import moment from 'moment';
+import { performance } from 'perf_hooks';
 import ApplicationError from '../errors/application-error';
 export const advancedResults = async (req: any, model: any, populate: any) => {
   try {
     let query, queryStr;
     const reqQuery = { ...req.query };
 
+    const t0 = performance.now()
+
     const removeFields = ['select', 'sort', 'limit'];
     removeFields.forEach((param) => delete reqQuery[param]);
 
     if (reqQuery.field?.length) {
       let { gt, gte, lt, lte } = reqQuery;
-      if (!gt && !gte && !lt && !lte && !reqQuery.in) {
+      if (!gt || !gte || !lt || !lte || !reqQuery.in) {
         throw new ApplicationError('kindly add a gt, gte, lt, lte in your query params');
       }
       let key = reqQuery.field;
@@ -52,12 +55,18 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
       query = reqQuery
     }
 
+    const t1 = performance.now()
+    console.log(" took  ", t1 - t0)
+
     query = model.find(query);
 
     if (populate) {
-      for (const i of populate) {
-        await query.populate(i, getPopulatedOptions(i));
+      let populateQuery: any = []
+      for (const item of populate) {
+        let newObject = { path: item, select: getPopulatedOptions(item) }
+        populateQuery.push(newObject)
       }
+      await query.populate(populateQuery);
     }
 
     if (req.query.sort) {
@@ -83,6 +92,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
       query = query.limit(limit);
     }
 
+
     const results = await query;
 
     //pagination
@@ -106,6 +116,9 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
       pagination,
       data: results,
     };
+
+    const t2 = performance.now()
+    console.log(" took  ", t2 - t0)
 
     return advancedResults;
   } catch (error: any) {

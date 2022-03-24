@@ -19,11 +19,10 @@ const schema = new Schema<IProduct>({
     ref: 'Product',
     required: false
   },
-  specifications: [{
-    type: String,
-    ref: 'Specification',
-    required: false,
-  }],
+  specifications: {
+    type: Array,
+    required: [true, 'name is required']
+  },
   isActive: {
     type: Boolean,
     default: function() {
