@@ -49,7 +49,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
           [key]: queryStr ? JSON.parse(queryStr) : 1,
         };
       }
-    } else {
+    } else  {
       if (reqQuery?.page)
       delete reqQuery?.page;
       query = reqQuery
@@ -85,7 +85,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     const total = await model.countDocuments();
 
     if (req.query.page) {
-      query = query.skip(endIndex);
+      query = query.skip(startIndex);
     }
 
     if (req.query.limit) {
