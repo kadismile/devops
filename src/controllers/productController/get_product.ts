@@ -39,7 +39,7 @@ export const get_product_brand: RequestHandler = async (req: Request, res) => {
 };
 
 export const get_product_variant: RequestHandler = async (req: Request, res) => {
-  let productVariant: any = await advancedResults(req, ProductVariant, ["attachments"])
+  let productVariant: any = await advancedResults(req, ProductVariant, [])
   if (productVariant?.data) {
     res.status(200).json({
       status: "success",
