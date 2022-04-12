@@ -58,9 +58,14 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     const t1 = performance.now()
     console.log(" took  ", t1 - t0)
 
-    query = model.find(query);
+    if (model === 'ProductVariant') {
+      query = model.find(query).select('-specifications');
+    } else {
+      query = model.find(query).select('-specifications');
+    }
 
-    if (populate) {
+
+    if (populate.length) {
       let populateQuery: any = []
       for (const item of populate) {
         let newObject = { path: item, select: getPopulatedOptions(item) }
@@ -113,6 +118,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
 
     let advancedResults = {
       count: results.length,
+      documentCount: total,
       pagination,
       data: results,
     };
