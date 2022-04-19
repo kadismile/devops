@@ -30,19 +30,19 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
       const vendor:any = await Vendor.findOne({ user: user._id });
       if (vendor || !user) {
         res.status(401).json({
-          data: "Invalid credentials"
+          data: "this user is not currently registered"
         });
       }
       if (isAdmin && !user.isAdmin && user.isAdmin === false) {
         res.status(401).json({
-          data: "Invalid credentials"
+          data: "this user is not currently registered"
         });
       }
       const isMatch = await user.matchPassword(password);
       if (!isMatch) {
         res.status(401).json({
           status: "failed",
-          data: "Invalid credentials"
+          data: "this user is not currently registered"
         });
       } else {
         const token = user.getSignedJwtToken();
