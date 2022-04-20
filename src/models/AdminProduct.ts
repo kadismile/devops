@@ -21,6 +21,10 @@ const schema = new Schema<IProduct>({
     type: Number,
     required: [true, 'Please Add a price']
   },
+  quantity: {
+    type: Number,
+    required: [true, 'Please Add a quantity']
+  },
   category: {
     type: String,
     ref: 'Category',

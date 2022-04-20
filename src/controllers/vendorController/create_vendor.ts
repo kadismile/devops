@@ -23,10 +23,10 @@ export const addVendorSchema = Joi.object().keys({
     longitude: Joi.string().required(),
     latitude: Joi.string().required(),
   }).required(),
-  accounts: Joi.object({
+/*  accounts: Joi.object({
     bankName: Joi.string().required(),
     accountNumber: Joi.string().required(),
-  }).required(),
+  }).required(),*/
 });
 
 const create_vendor: RequestHandler = async (req: Request<{}, {}>, res) => {
