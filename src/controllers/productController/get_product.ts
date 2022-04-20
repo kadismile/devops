@@ -9,7 +9,7 @@ import Category from '../../models/Category';
 import _ from 'lodash';
 
 export const get_product: RequestHandler = async (req: Request, res) => {
-  let product: any = await advancedResults(req, Product, ["attachments", "category", "vendor", "user"])
+  let product: any = await advancedResults(req, Product, ["attachments", "category", "vendor", "user", "productBrand"])
   if (product?.data) {
     res.status(200).json({
       status: "success",
@@ -19,7 +19,7 @@ export const get_product: RequestHandler = async (req: Request, res) => {
 };
 
 export const get_admin_product: RequestHandler = async (req: Request, res) => {
-  let product: any = await advancedResults(req, AdminProduct, ["attachments", "category"])
+  let product: any = await advancedResults(req, AdminProduct, ["attachments", "category", "productBrand"])
   if (product?.data) {
     res.status(200).json({
       status: "success",

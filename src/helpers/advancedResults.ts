@@ -142,5 +142,7 @@ const getPopulatedOptions = (population: string) => {
       return 'fullName';
     case population = 'attachments':
       return 'url';
+    case population = 'productBrand':
+      return 'name';
   }
 };
