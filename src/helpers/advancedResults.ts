@@ -65,7 +65,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     }
 
 
-    if (populate.length) {
+    if (populate?.length) {
       let populateQuery: any = []
       for (const item of populate) {
         let newObject = { path: item, select: getPopulatedOptions(item) }
@@ -117,7 +117,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
     }
 
     let advancedResults = {
-      count: results.length,
+      count: results?.length,
       documentCount: total,
       pagination,
       data: results,
@@ -128,6 +128,7 @@ export const advancedResults = async (req: any, model: any, populate: any) => {
 
     return advancedResults;
   } catch (error: any) {
+    console.log("Eroror ====>", error)
     throw new ApplicationError(error.message);
   }
 };
