@@ -25,7 +25,7 @@ const login: RequestHandler = async (req: Request<{}, {}>, res) => {
       if (!isMatch || !vendor) {
         res.status(401).json({
           status: "failed",
-          data: "Invalid credentials"
+          data: "this vendor is not currently registered"
         });
       } else {
         const token = user.getSignedJwtToken();
