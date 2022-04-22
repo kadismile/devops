@@ -10,7 +10,7 @@ product_routes.post('/create', protect, multerUpload, productController.create_p
 product_routes.post('/upload', protect, multerUpload, productController.upload_products_by_csv);
 product_routes.post('/variant/create', protect, multerUpload, productController.create_product_variant);
 product_routes.post('/brand/create', productController.create_product_brand);
-product_routes.get('/brands', protect, productController.get_product_brand);
+product_routes.get('/brands', productController.get_product_brand);
 product_routes.post('/brand/delete', protect, productController.delete_product_brand);
 product_routes.post('/brand/update', protect, productController.update_brand);
 product_routes.post('/brand/upload', protect, multerUpload, productController.upload_brand_by_csv);
