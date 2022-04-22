@@ -9,6 +9,7 @@ export const addProductSchema = Joi.object().keys({
   description: Joi.string().required(),
   productVariantId: Joi.string().required(),
   price: Joi.number().required(),
+  quantity: Joi.number().required(),
   user: Joi.string().required(),
   vendor: Joi.string().required(),
   category: Joi.string().required(),
