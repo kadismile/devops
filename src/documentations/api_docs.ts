@@ -13,6 +13,7 @@ export const api_docs = {
   host:`${domainUrl[1]}`,
   basePath: "/api/v1",
   schemes: [
+    "http",
     "https"
   ],
   consumes: [
